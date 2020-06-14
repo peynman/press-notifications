@@ -1,5 +1,5 @@
 {
-  "name": "peynman/larapress-rabbitmq",
+  "name": "peynman/larapress-notifications",
   "description": "This is the description of the package.",
   "type": "library",
   "license": "MIT",
@@ -12,25 +12,27 @@
   ],
   "autoload": {
     "psr-4": {
-      "Larapress\\RabbitMQ\\": "src/"
+      "Larapress\\Notifications\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "Larapress\\RabbitMQ\\Tests\\": "tests/"
+      "Larapress\\Notifications\\Tests\\": "tests/"
     }
   },
   "extra": {
     "laravel": {
       "providers": [
-        "Larapress\\RabbitMQ\\Providers\\PackageServiceProvider"
+        "Larapress\\Notifications\\Providers\\PackageServiceProvider"
       ]
     }
   },
   "require": {
     "php": "^7.2",
     "laravel/framework": "^6.2",
-    "bschmitt/laravel-amqp": "2.*"
+    "bschmitt/laravel-amqp": "2.*",
+    "nexmo/client": "^2.0",
+    "peynman/larapress-crud": "master"
   },
   "require-dev": {
     "facade/ignition": "^1.4",

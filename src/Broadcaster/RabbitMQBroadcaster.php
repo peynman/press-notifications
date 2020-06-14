@@ -1,6 +1,6 @@
 <?php
 
-namespace Larapress\RabbitMQ\Broadcaster;
+namespace Larapress\Notifications\Broadcaster;
 
 use Illuminate\Broadcasting\Broadcasters\Broadcaster;
 use Illuminate\Support\Facades\Log;
