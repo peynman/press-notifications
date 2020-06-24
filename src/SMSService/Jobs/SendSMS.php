@@ -11,8 +11,10 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
 use Larapress\CRUD\BaseFlags;
+use Larapress\CRUD\Events\CRUDUpdated;
+use Larapress\Notifications\CRUD\SMSMessageCRUDProvider;
 use Larapress\Notifications\Models\SMSGatewayData;
 
 class SendSMS implements ShouldQueue
@@ -31,9 +33,13 @@ class SendSMS implements ShouldQueue
     public function __construct(SMSMessage $message)
     {
 	    $this->message = $message;
-	    $this->onQueue(config('larapress.notifications.sms.queue'));
+	    // $this->onQueue(config('larapress.notifications.sms.queue'));
     }
 
+    public function tags()
+    {
+        return ['send-sms', 'message:'.$this->message->id];
+    }
 	/**
 	 * Execute the job.
 	 *
@@ -52,8 +58,9 @@ class SendSMS implements ShouldQueue
             /** @var ISMSGateway */
             $gateway = $gatewayData->getGateway();
             $gateway->init();
-		    $msg_id = $gateway->sendSMS($this->message->to, $this->message->message, [
-			    'from' => $this->message->from,
+
+            $msg_id = $gateway->sendSMS($this->message->to, $this->message->message, [
+                'from' => $this->message->from,
             ]);
             $data = $this->message->data;
             if (is_null($data)) {
@@ -61,16 +68,20 @@ class SendSMS implements ShouldQueue
             }
             $data['provider_event_id'] = $msg_id;
 
+            $now = Carbon::now();
 	        $this->message->update([
 	        	'status' => SMSMessage::STATUS_SENT,
-                'sent_at' => Carbon::now(),
+                'sent_at' => $now,
                 'data' => $data,
-		    ]);
+            ]);
+            CRUDUpdated::dispatch($this->message, SMSMessageCRUDProvider::class, $now);
 	    } catch (\Exception $e) {
 	    	$this->message->update([
 	    		'status' => SMSMessage::STATUS_FAILED_SEND,
             ]);
-            throw new Exception("Failed sending SMSM Message", 0, $e);
+            throw ValidationException::withMessages([
+                'number' => trans('larapress::ecommerce.messaging.sms_send_error')
+            ]);
 	    }
     }
 }
