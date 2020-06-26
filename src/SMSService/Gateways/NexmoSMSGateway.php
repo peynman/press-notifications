@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Larapress\Notifications\SMSService\Gatewayes;
+namespace Larapress\Notifications\SMSService\Gateways;
 
 
 use Larapress\Notifications\SMSService\ISMSGateway;

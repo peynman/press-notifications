@@ -1,6 +1,6 @@
 <?php
 
-namespace Larapress\Notifications\SMSService\Gatewayes;
+namespace Larapress\Notifications\SMSService\Gateways;
 
 use Exception;
 use Larapress\Notifications\SMSService\ISMSGateway;
