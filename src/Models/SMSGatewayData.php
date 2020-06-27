@@ -6,6 +6,7 @@ namespace Larapress\Notifications\Models;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Log;
 use Larapress\CRUD\Exceptions\AppException;
 use Larapress\CRUD\ICRUDUser;
 use Larapress\Notifications\SMSService\Gatewayes\NexmoSMSGateway;

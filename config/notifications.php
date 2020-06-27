@@ -2,6 +2,7 @@
 
 use Larapress\Notifications\SMSService\Gatewayes\FaraPayamakSMSGateway;
 use Larapress\Notifications\SMSService\Gatewayes\NexmoSMSGateway;
+use Larapress\Notifications\SMSService\Gateways\SMSIRGateway;
 
 return [
     'sms' => [
@@ -10,6 +11,7 @@ return [
         'gateways' => [
             'nexmo' => NexmoSMSGateway::class,
             'farapayamak' => FaraPayamakSMSGateway::class,
+            'smsir' => SMSIRGateway::class,
         ],
     ],
 

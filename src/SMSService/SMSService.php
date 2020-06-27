@@ -4,6 +4,7 @@
 namespace Larapress\Notifications\SMSService;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Larapress\Notifications\Models\SMSGatewayData;
 use Larapress\Profiles\Models\Domain;
 
@@ -37,6 +38,8 @@ class SMSService implements ISMSService
                     }
                 }
             }
+
+            Log::debug($gateway);
 
             return $gateway;
         }

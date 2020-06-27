@@ -24,12 +24,12 @@ class SMSGatewayDataCRUDProvider implements ICRUDProvider, IPermissionsMetadata
 	public $createValidations = [
         'name' => 'required|string|unique:sms_gateways,name',
         'flags' => 'nullable|numeric',
-        'data.gateway' => 'required|string|',
+        'data.gateway' => 'required|string',
 	];
 	public $updateValidations = [
         'name' => 'required|string|unique:sms_gateways,name',
         'flags' => 'nullable|numeric',
-        'data.gateway' => 'required|string|',
+        'data.gateway' => 'required|string',
 	];
 	public $validSortColumns = ['id', 'title', 'gateway_id', 'status', 'created_at'];
 	public $validRelations = [];

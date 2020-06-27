@@ -11,6 +11,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Larapress\CRUD\BaseFlags;
 use Larapress\CRUD\Events\CRUDUpdated;
@@ -74,11 +75,13 @@ class SendSMS implements ShouldQueue
                 'sent_at' => $now,
                 'data' => $data,
             ]);
+
             CRUDUpdated::dispatch($this->message, SMSMessageCRUDProvider::class, $now);
 	    } catch (\Exception $e) {
 	    	$this->message->update([
 	    		'status' => SMSMessage::STATUS_FAILED_SEND,
             ]);
+            Log::critical('SMS Send Failed: '.$e->getMessage(), $e->getTrace());
             throw ValidationException::withMessages([
                 'number' => trans('larapress::ecommerce.messaging.sms_send_error')
             ]);

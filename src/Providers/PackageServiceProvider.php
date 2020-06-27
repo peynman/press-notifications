@@ -4,7 +4,11 @@ namespace Larapress\Notifications\Providers;
 
 use Illuminate\Broadcasting\BroadcastManager;
 use Illuminate\Support\ServiceProvider;
+use Larapress\ECommerce\Repositories\BankGatewayRepository;
+use Larapress\ECommerce\Repositories\IBankGatewayRepository;
 use Larapress\Notifications\Broadcaster\RabbitMQBroadcaster;
+use Larapress\Notifications\Repository\ISMSGatewayRepository;
+use Larapress\Notifications\Repository\SMSGatewayRepository;
 use Larapress\Notifications\SMSService\ISMSService;
 use Larapress\Notifications\SMSService\SMSService;
 
@@ -18,6 +22,8 @@ class PackageServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind(ISMSService::class, SMSService::class);
+        $this->app->bind(ISMSGatewayRepository::class, SMSGatewayRepository::class);
+        $this->app->bind(IBankGatewayRepository::class, BankGatewayRepository::class);
     }
 
     /**
