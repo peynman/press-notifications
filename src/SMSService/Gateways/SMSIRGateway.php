@@ -4,7 +4,7 @@ namespace Larapress\Notifications\SMSService\Gateways;
 
 use Exception;
 use Illuminate\Support\Facades\Log;
-use Larapress\Notifications\SMSService\Gateways\SMSIR\SendMessage;
+use Larapress\Notifications\SMSService\Gateways\SMSIR\UltraFastSend;
 use Larapress\Notifications\SMSService\ISMSGateway;
 
 /**
@@ -41,10 +41,9 @@ class SMSIRGateway implements ISMSGateway
 	public function init()
 	{
         ini_set("soap.wsdl_cache_enabled", "0");
-        $this->client = new SendMessage(
+        $this->client = new UltraFastSend(
             $this->config['api_key'],
-            $this->config['secret_key'],
-            $this->config['line_number']
+            $this->config['secret_key']
         );
 	}
 
@@ -57,8 +56,16 @@ class SMSIRGateway implements ISMSGateway
 	 */
 	function sendSMS( String $number, String $message, array $options )
 	{
-        $result = $this->client->SendMessage([$number], [$message], date("Y-m-d")."T".date("H:i:s"));
-        Log::debug('SMS Sent: '. $result.' :: '.json_encode($this->config));
+        $result = $this->client->UltraFastSend([
+            'Mobile' => $number,
+            'TemplateId' => 10909,
+            'ParameterArray' => [
+                [
+                    'Parameter' => 'VerificationCode',
+                    'ParameterValue' => $message
+                ]
+            ]
+        ]);
         return $result;
 	}
 

@@ -8,8 +8,10 @@
  * @version 1.2
  */
 
-class SmsIR_UltraFastSend {
-	
+ namespace Larapress\Notifications\SMSService\Gateways\SMSIR;
+
+class UltraFastSend {
+
 	/**
 	* gets API Ultra Fast Send Url.
 	*
@@ -27,7 +29,7 @@ class SmsIR_UltraFastSend {
 	protected function getApiTokenUrl(){
 		return "http://RestfulSms.com/api/Token";
 	}
-	
+
 	/**
 	* gets config parameters for sending request.
 	*
@@ -38,7 +40,7 @@ class SmsIR_UltraFastSend {
     public function __construct($APIKey,$SecretKey){
 		$this->APIKey = $APIKey;
 		$this->SecretKey = $SecretKey;
-    }	
+    }
 
 	/**
 	* Ultra Fast Send Message.
@@ -47,18 +49,17 @@ class SmsIR_UltraFastSend {
     * @return string Indicates the sent sms result
 	*/
 	public function UltraFastSend($data) {
-		
 		$token = $this->GetToken($this->APIKey, $this->SecretKey);
 		if($token != false){
 			$postData = $data;
-			
+
 			$url = $this->getAPIUltraFastSendUrl();
 			$UltraFastSend = $this->execute($postData, $url, $token);
 			$object = json_decode($UltraFastSend);
 
-			if(is_object($object)){
+			if (is_object($object)) {
 				$array = get_object_vars($object);
-				if(is_array($array)){
+				if (is_array($array)){
 					$result = $array['Message'];
 				} else {
 					$result = false;
@@ -66,13 +67,13 @@ class SmsIR_UltraFastSend {
 			} else {
 				$result = false;
 			}
-			
+
 		} else {
 			$result = false;
 		}
 		return $result;
 	}
-	
+
 	/**
 	* gets token key for all web service requests.
 	*
@@ -89,18 +90,18 @@ class SmsIR_UltraFastSend {
 		$ch = curl_init($this->getApiTokenUrl());
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array(
                                             'Content-Type: application/json'
-                                            ));		
+                                            ));
 		curl_setopt($ch, CURLOPT_HEADER, false);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-		curl_setopt($ch, CURLOPT_POST, count($postString));
+		curl_setopt($ch, CURLOPT_POST, 1);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $postString);
-		
+
 		$result = curl_exec($ch);
 		curl_close($ch);
-		
+
 		$response = json_decode($result);
-		
+
 		if(is_object($response)){
 			$resultVars = get_object_vars($response);
 			if(is_array($resultVars)){
@@ -113,10 +114,10 @@ class SmsIR_UltraFastSend {
 				}
 			}
 		}
-		
+
 		return $resp;
 	}
-	
+
 	/**
 	* executes the main method.
 	*
@@ -126,23 +127,23 @@ class SmsIR_UltraFastSend {
     * @return string Indicates the curl execute result
 	*/
 	private function execute($postData, $url, $token){
-		
+
 		$postString = json_encode($postData);
 
 		$ch = curl_init($url);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array(
 											'Content-Type: application/json',
 											'x-sms-ir-secure-token: '.$token
-											));		
+											));
 		curl_setopt($ch, CURLOPT_HEADER, false);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-		curl_setopt($ch, CURLOPT_POST, count($postString));
+		curl_setopt($ch, CURLOPT_POST, 1);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $postString);
-		
+
 		$result = curl_exec($ch);
 		curl_close($ch);
-		
+
 		return $result;
 	}
 }
