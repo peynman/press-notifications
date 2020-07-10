@@ -35,7 +35,7 @@ class SMSGatewayDataCRUDProvider implements ICRUDProvider, IPermissionsMetadata
 	public $validRelations = [];
 	public $validFilters = [];
 	public $defaultShowRelations = [];
-	public $excludeFromUpdate = [];
+	public $excludeIfNull = [];
 	public $autoSyncRelations = [];
 	public $searchColumns = [
 		'equals:id',

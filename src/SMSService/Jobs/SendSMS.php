@@ -34,7 +34,7 @@ class SendSMS implements ShouldQueue
     public function __construct(SMSMessage $message)
     {
 	    $this->message = $message;
-	    // $this->onQueue(config('larapress.notifications.sms.queue'));
+	    $this->onQueue(config('larapress.crud.queue'));
     }
 
     public function tags()

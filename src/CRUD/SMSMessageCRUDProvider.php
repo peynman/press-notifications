@@ -53,7 +53,7 @@ class SMSMessageCRUDProvider implements ICRUDProvider, IPermissionsMetadata
     ];
 	public $validFilters = [];
 	public $defaultShowRelations = [];
-	public $excludeFromUpdate = [];
+	public $excludeIfNull = [];
 	public $autoSyncRelations = [];
 	public $searchColumns = [
 		'equals:id',
