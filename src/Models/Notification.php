@@ -18,8 +18,12 @@ class Notification extends Model
     protected $table = 'notifications';
 
     protected $fillable = [
-        'author_id',
+        'user_id',
+        'title',
+        'message',
         'data',
+        'status',
+        'flags',
     ];
 
     protected $casts = [
