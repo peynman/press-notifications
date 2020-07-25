@@ -5,9 +5,9 @@ namespace Larapress\Notifications\CRUD;
 
 
 use Illuminate\Support\Facades\Auth;
-use Larapress\CRUD\Base\BaseCRUDProvider;
-use Larapress\CRUD\Base\ICRUDProvider;
-use Larapress\CRUD\Base\IPermissionsMetadata;
+use Larapress\CRUD\Services\BaseCRUDProvider;
+use Larapress\CRUD\Services\ICRUDProvider;
+use Larapress\CRUD\Services\IPermissionsMetadata;
 use Larapress\Notifications\Models\SMSMessage;
 use Larapress\Notifications\SMSService\Jobs\SendSMS;
 
