@@ -4,6 +4,7 @@
 namespace Larapress\Notifications\SMSService;
 
 use Larapress\Profiles\Models\Domain;
+use Larapress\Notifications\Models\SMSMessage;
 
 interface ISMSService
 {
@@ -14,4 +15,11 @@ interface ISMSService
      * @return SMSGatewayData
      */
     public function findGatewayData(Domain $domain);
+
+    /**
+     * Undocumented function
+     *
+     * @return SMSMessage[]
+     */
+    public function queueSMSMessagesForRequest(BatchSendSMSRequest $request);
 }

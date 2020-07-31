@@ -2,7 +2,11 @@
 
 namespace Larapress\Notifications\Repository;
 
-class SMSGatewayRepository implements ISMSGatewayRepository {
+use Larapress\CRUD\Extend\Helpers;
+use Larapress\Notifications\Models\SMSGatewayData;
+
+class SMSGatewayRepository implements ISMSGatewayRepository
+{
 
     /**
      * Undocumented function
@@ -10,7 +14,8 @@ class SMSGatewayRepository implements ISMSGatewayRepository {
      * @param IProfileUser|ICRUDUser $user
      * @return array
      */
-    public function getAllSMSGatewayTypes($user) {
+    public function getAllSMSGatewayTypes($user)
+    {
         return [
             'farapayamak' => [
                 'soap_url' => [
@@ -53,5 +58,23 @@ class SMSGatewayRepository implements ISMSGatewayRepository {
             ],
             'nexmo' => []
         ];
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param [type] $user
+     * @return void
+     */
+    public function getSMSGateways($user)
+    {
+        if (
+            $user->hasRole(config('larapress.profiles.security.roles.super-role')) ||
+            $user->hasRole(config('larapress.profiles.security.roles.affiliate'))
+        ) {
+            return SMSGatewayData::select(['id', 'name'])->get();
+        }
+
+        return [];
     }
 }

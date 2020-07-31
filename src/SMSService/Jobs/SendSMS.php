@@ -34,7 +34,7 @@ class SendSMS implements ShouldQueue
     public function __construct(SMSMessage $message)
     {
 	    $this->message = $message;
-	    // $this->onQueue(config('larapress.crud.queue'));
+	    $this->onQueue(config('larapress.crud.queue'));
     }
 
     public function tags()
@@ -82,9 +82,7 @@ class SendSMS implements ShouldQueue
 	    		'status' => SMSMessage::STATUS_FAILED_SEND,
             ]);
             Log::critical('SMS Send Failed: '.$e->getMessage(), $e->getTrace());
-            throw ValidationException::withMessages([
-                'number' => trans('larapress::ecommerce.messaging.sms_send_error')
-            ]);
+            throw new AppException(AppException::ERR_REJECTED_RESULT);
 	    }
     }
 }

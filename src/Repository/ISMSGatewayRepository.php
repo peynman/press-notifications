@@ -10,4 +10,13 @@ interface ISMSGatewayRepository {
      * @return array
      */
     public function getAllSMSGatewayTypes($user);
+
+
+    /**
+     * Undocumented function
+     *
+     * @param [type] $user
+     * @return void
+     */
+    public function getSMSGateways($user);
 }

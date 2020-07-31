@@ -76,4 +76,5 @@ class SMSMessage extends Model
     const STATUS_RECEIVED = 4;
 
     const FLAGS_VERIFICATION_MESSAGE = 1;
+    const FLAGS_BATCH_SEND = 2;
 }

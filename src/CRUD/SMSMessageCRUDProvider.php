@@ -20,7 +20,8 @@ class SMSMessageCRUDProvider implements ICRUDProvider, IPermissionsMetadata
         self::VIEW,
         self::CREATE,
         self::EDIT,
-        self::DELETE
+        self::DELETE,
+        'send',
     ];
 	public $model = SMSMessage::class;
 	public $createValidations = [
