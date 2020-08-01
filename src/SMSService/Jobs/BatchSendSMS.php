@@ -40,7 +40,7 @@ class BatchSendSMS implements ShouldQueue
         $this->gatewayId = $gateway_id;
         $this->sender = $sender;
 
-        $this->onQueue(config('larapress.crud.queue'));
+        // $this->onQueue(config('larapress.crud.queue'));
     }
 
     public function tags()
