@@ -4,13 +4,14 @@ namespace Larapress\Notifications\SMSService\Gateways;
 
 use Exception;
 use Illuminate\Support\Facades\Log;
+use Larapress\Notifications\SMSService\Gateways\SMSIR\SendMessage;
 use Larapress\Notifications\SMSService\Gateways\SMSIR\UltraFastSend;
 use Larapress\Notifications\SMSService\ISMSGateway;
 
 /**
  * An implementation of ISMSGateway for FaraPayamak Provider
  */
-class SMSIRGateway implements ISMSGateway
+class SMSIRSimpleGateway implements ISMSGateway
 {
 	protected $config = [];
 	/** @var SmsIR_SendMessage */
@@ -27,9 +28,6 @@ class SMSIRGateway implements ISMSGateway
         if (!isset($conf['api_key']) || !isset($conf['secret_key']) || !isset($conf['line_number'])) {
             throw new Exception("SMSIR invalid config");
         }
-
-        Log::debug(json_encode($conf));
-
         $this->config = $conf;
 	}
 
@@ -41,9 +39,10 @@ class SMSIRGateway implements ISMSGateway
 	public function init()
 	{
         ini_set("soap.wsdl_cache_enabled", "0");
-        $this->client = new UltraFastSend(
+        $this->client = new SendMessage(
             $this->config['api_key'],
-            $this->config['secret_key']
+            $this->config['secret_key'],
+            $this->config['line_number'],
         );
 	}
 
@@ -56,16 +55,10 @@ class SMSIRGateway implements ISMSGateway
 	 */
 	function sendSMS( String $number, String $message, array $options )
 	{
-        $result = $this->client->UltraFastSend([
-            'Mobile' => $number,
-            'TemplateId' => 10909,
-            'ParameterArray' => [
-                [
-                    'Parameter' => 'VerificationCode',
-                    'ParameterValue' => $message
-                ]
-            ]
-        ]);
+        $result = $this->client->SendMessage(
+            [$number],
+            [$message]
+        );
         return $result;
 	}
 

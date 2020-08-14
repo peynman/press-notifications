@@ -11,7 +11,8 @@ return [
         'gateways' => [
             'nexmo' => NexmoSMSGateway::class,
             'farapayamak' => FaraPayamakSMSGateway::class,
-            'smsir' => SMSIRGateway::class,
+            'smsir_fast' => SMSIRFastGateway::class,
+            'smsir_simple' => SMSIRSimpleGateway::class,
         ],
     ],
 

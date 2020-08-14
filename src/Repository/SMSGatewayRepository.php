@@ -39,7 +39,7 @@ class SMSGatewayRepository implements ISMSGatewayRepository
                     'label' => 'Phone Number'
                 ],
             ],
-            'smsir' => [
+            'smsir_simple' => [
                 'api_key' => [
                     'type' => 'input',
                     'input' => 'text',
@@ -55,6 +55,28 @@ class SMSGatewayRepository implements ISMSGatewayRepository
                     'input' => 'text',
                     'label' => 'Line number'
                 ],
+            ],
+            'smsir_fast' => [
+                'api_key' => [
+                    'type' => 'input',
+                    'input' => 'text',
+                    'label' => 'API Key'
+                ],
+                'secret_key' => [
+                    'type' => 'input',
+                    'input' => 'text',
+                    'label' => 'Secret Key'
+                ],
+                'line_number' => [
+                    'type' => 'input',
+                    'input' => 'text',
+                    'label' => 'Line number'
+                ],
+                'template_id' => [
+                    'type' => 'input',
+                    'input' => 'text',
+                    'label' => 'Template ID',
+                ]
             ],
             'nexmo' => []
         ];

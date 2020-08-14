@@ -45,7 +45,16 @@ class BatchSendSMSRequest extends FormRequest
     }
 
     public function getIds() {
-        return explode(",", $this->request->get('ids', ''));
+        $ids = $this->request->get('ids');
+        if (is_string($ids)) {
+            return explode(",", $ids);
+        } else {
+            if (!is_array($ids)) {
+                return [$ids];
+            }
+
+            return $ids;
+        }
     }
 
     public function getMessage() {

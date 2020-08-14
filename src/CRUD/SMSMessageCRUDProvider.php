@@ -112,11 +112,11 @@ class SMSMessageCRUDProvider implements ICRUDProvider, IPermissionsMetadata
      */
 	public function onBeforeQuery( $query )
 	{
-		/** @var User $user */
-		$user = Auth::user();
-		if (!$user->hasRole('super-role')) {
-			$query->where('author_id', $user->id);
-		}
+        /** @var IProfileUser|ICRUDUser $user */
+        $user = Auth::user();
+        if (! $user->hasRole(config('larapress.profiles.security.roles.super-role'))) {
+            $query->orWhere('author_id', $user->id);
+        }
 
 		return $query;
 	}
