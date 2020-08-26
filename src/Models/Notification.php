@@ -13,11 +13,19 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Notification extends Model
 {
+    const STATUS_CREATED = 1;
+    const STATUS_UNSEEN = 2;
+    const STATUS_DISMISSED = 3;
+    const STATUS_SEEN = 4;
+
+    const FLAGS_SENT = 1;
+
     use SoftDeletes;
 
-    protected $table = 'notifications';
+    protected $table = 'user_notifications';
 
     protected $fillable = [
+        'author_id',
         'user_id',
         'title',
         'message',
@@ -36,5 +44,13 @@ class Notification extends Model
     public function author()
     {
         return $this->belongsTo(config('larapress.crud.user.class'), 'author_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user()
+    {
+        return $this->belongsTo(config('larapress.crud.user.class'), 'user_id');
     }
 }

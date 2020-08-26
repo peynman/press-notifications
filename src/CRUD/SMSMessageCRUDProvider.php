@@ -9,7 +9,7 @@ use Larapress\CRUD\Services\BaseCRUDProvider;
 use Larapress\CRUD\Services\ICRUDProvider;
 use Larapress\CRUD\Services\IPermissionsMetadata;
 use Larapress\Notifications\Models\SMSMessage;
-use Larapress\Notifications\SMSService\Jobs\SendSMS;
+use Larapress\Notifications\Services\SMSService\Jobs\SendSMS;
 
 class SMSMessageCRUDProvider implements ICRUDProvider, IPermissionsMetadata
 {
@@ -58,7 +58,9 @@ class SMSMessageCRUDProvider implements ICRUDProvider, IPermissionsMetadata
 	public $autoSyncRelations = [];
 	public $searchColumns = [
 		'equals:id',
-		'equals:sms_gateway_id',
+        'equals:sms_gateway_id',
+        'to',
+        'from',
 	];
 	public $filterFields = [];
 	public $filterDefaults = [];

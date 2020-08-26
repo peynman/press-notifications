@@ -1,9 +1,9 @@
 <?php
 
-namespace Larapress\Notifications\SMSService\Jobs;
+namespace Larapress\Notifications\Services\SMSService\Jobs;
 
 use Larapress\Notifications\Models\SMSMessage;
-use Larapress\Notifications\SMSService\ISMSService;
+use Larapress\Notifications\Services\SMSService\ISMSService;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Bus\Queueable;

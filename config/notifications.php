@@ -1,8 +1,8 @@
 <?php
 
-use Larapress\Notifications\SMSService\Gatewayes\FaraPayamakSMSGateway;
-use Larapress\Notifications\SMSService\Gatewayes\NexmoSMSGateway;
-use Larapress\Notifications\SMSService\Gateways\SMSIRGateway;
+use Larapress\Notifications\Services\SMSService\Gatewayes\FaraPayamakSMSGateway;
+use Larapress\Notifications\Services\SMSService\Gatewayes\NexmoSMSGateway;
+use Larapress\Notifications\Services\SMSService\Gateways\SMSIRGateway;
 
 return [
     'sms' => [

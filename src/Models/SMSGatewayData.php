@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Log;
 use Larapress\CRUD\Exceptions\AppException;
 use Larapress\CRUD\ICRUDUser;
-use Larapress\Notifications\SMSService\Gatewayes\NexmoSMSGateway;
+use Larapress\Notifications\Services\SMSService\Gatewayes\NexmoSMSGateway;
 
 /**
  * @property int            $id

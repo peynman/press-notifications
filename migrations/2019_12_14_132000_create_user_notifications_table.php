@@ -16,6 +16,7 @@ class CreateUserNotificationsTable extends Migration
         Schema::create('user_notifications', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('user_id', false, true);
+            $table->bigInteger('author_id', false, true);
             $table->string('title');
             $table->string('message');
             $table->smallInteger('status', false, true)->default(1);
@@ -25,6 +26,7 @@ class CreateUserNotificationsTable extends Migration
             $table->softDeletes();
 
 	        $table->foreign('user_id')->references('id')->on('users');
+	        $table->foreign('author_id')->references('id')->on('users');
         });
     }
 

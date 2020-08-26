@@ -1,9 +1,9 @@
 <?php
 
-namespace Larapress\Notifications\SMSService\Gateways;
+namespace Larapress\Notifications\Services\SMSService\Gateways;
 
 use Exception;
-use Larapress\Notifications\SMSService\ISMSGateway;
+use Larapress\Notifications\Services\SMSService\ISMSGateway;
 use SoapClient;
 
 /**

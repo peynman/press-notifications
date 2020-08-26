@@ -8,7 +8,7 @@
  * @version 1.2
  */
 
-namespace Larapress\Notifications\SMSService\Gateways\SMSIR;
+namespace Larapress\Notifications\Services\SMSService\Gateways\SMSIR;
 
 class SendMessage {
 

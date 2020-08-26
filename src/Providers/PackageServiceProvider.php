@@ -9,8 +9,10 @@ use Larapress\ECommerce\Repositories\IBankGatewayRepository;
 use Larapress\Notifications\Broadcaster\RabbitMQBroadcaster;
 use Larapress\Notifications\Repository\ISMSGatewayRepository;
 use Larapress\Notifications\Repository\SMSGatewayRepository;
-use Larapress\Notifications\SMSService\ISMSService;
-use Larapress\Notifications\SMSService\SMSService;
+use Larapress\Notifications\Services\Notifications\INotificationService;
+use Larapress\Notifications\Services\Notifications\NotificationService;
+use Larapress\Notifications\Services\SMSService\ISMSService;
+use Larapress\Notifications\Services\SMSService\SMSService;
 
 class PackageServiceProvider extends ServiceProvider
 {
@@ -24,6 +26,7 @@ class PackageServiceProvider extends ServiceProvider
         $this->app->bind(ISMSService::class, SMSService::class);
         $this->app->bind(ISMSGatewayRepository::class, SMSGatewayRepository::class);
         $this->app->bind(IBankGatewayRepository::class, BankGatewayRepository::class);
+        $this->app->bind(INotificationService::class, NotificationService::class);
     }
 
     /**
@@ -39,9 +42,5 @@ class PackageServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/../../config/notifications.php' => config_path('larapress/notifications.php'),
         ], ['config', 'larapress', 'larapress-notifications']);
-
-        $broadcastManager->extend('rabbitmq', function ($app, array $config) {
-            return new RabbitMQBroadcaster();
-        });
     }
 }

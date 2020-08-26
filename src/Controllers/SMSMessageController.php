@@ -4,8 +4,9 @@ namespace Larapress\Notifications\Controllers;
 
 use Larapress\CRUD\CRUDControllers\BaseCRUDController;
 use Larapress\Notifications\CRUD\SMSMessageCRUDProvider;
-use Larapress\Notifications\SMSService\BatchSendSMSRequest;
-use Larapress\Notifications\SMSService\ISMSService;
+use Larapress\Notifications\Services\SMSService\BatchSendSMSRequest;
+use Larapress\Notifications\Services\SMSService\ISMSService;
+use Illuminate\Http\Response;
 
 class SMSMessageController extends BaseCRUDController
 {
@@ -29,7 +30,7 @@ class SMSMessageController extends BaseCRUDController
     /**
      * Undocumented function
      *
-     * @return void
+     * @return Response
      */
     public function sendBatchMessage(ISMSService $service, BatchSendSMSRequest $request) {
         return $service->queueSMSMessagesForRequest($request);

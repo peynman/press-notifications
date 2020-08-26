@@ -1,10 +1,10 @@
 <?php
 
 
-namespace Larapress\Notifications\SMSService\Gateways;
+namespace Larapress\Notifications\Services\SMSService\Gateways;
 
 
-use Larapress\Notifications\SMSService\ISMSGateway;
+use Larapress\Notifications\Services\SMSService\ISMSGateway;
 use Nexmo\Client;
 use Nexmo\Client\Credentials\Basic;
 

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Larapress\Notifications\SMSService;
+namespace Larapress\Notifications\Services\SMSService;
 
 /**
  * An SMS Service gateway interface,

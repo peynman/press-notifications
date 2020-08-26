@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Larapress\Notifications\SMSService;
+namespace Larapress\Notifications\Services\SMSService;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -10,12 +10,13 @@ use Larapress\CRUD\BaseFlags;
 use Larapress\ECommerce\Models\Cart;
 use Larapress\Notifications\Models\SMSGatewayData;
 use Larapress\Notifications\Models\SMSMessage;
-use Larapress\Notifications\SMSService\Jobs\BatchSendSMS;
+use Larapress\Notifications\Services\SMSService\Jobs\BatchSendSMS;
 use Larapress\Profiles\Models\Domain;
 use Larapress\Profiles\Models\PhoneNumber;
 use Larapress\Reports\Services\ITaskReportService;
-
-use function Symfony\Component\String\b;
+use Larapress\Profiles\IProfileUser;
+use Larapress\CRUD\ICRUDUser;
+use Larapress\Profiles\CRUD\PhoneNumberCRUDProvider;
 
 class SMSService implements ISMSService
 {
@@ -63,84 +64,111 @@ class SMSService implements ISMSService
      */
     public function queueSMSMessagesForRequest(BatchSendSMSRequest $request)
     {
-        $numbers = [];
         $ids = $request->getIds();
         $query = PhoneNumber::select('number', 'user_id', 'flags');
 
         switch ($request->getType()) {
             case 'in_ids':
-                $numbers = $query->whereIn('user_id', $ids)->get();
+                $query->whereIn('user_id', $ids);
+            break;
+            case 'all_except_ids':
+                $query->whereNotIn('user_id', $ids);
             break;
             case 'in_purchased_ids':
-
-                $numbers = $query->whereHas('user', function($q) use($ids) {
+                $query->whereHas('user', function($q) use($ids) {
                     $q->whereHas('carts', function($q) use($ids) {
                         $q->whereIn('status', [Cart::STATUS_ACCESS_COMPLETE, Cart::STATUS_ACCESS_GRANTED]);
                         $q->whereHas('products', function($q) use($ids) {
                             $q->whereIn('id', $ids);
                         });
                     });
-                })->get();
+                });
             break;
             case 'not_in_purchased_ids':
-                $numbers = $query->whereHas('customer', function($q) use($ids) {
+                $query->whereHas('customer', function($q) use($ids) {
                     $q->whereHas('carts', function($q) use($ids) {
                         $q->whereIn('status', [Cart::STATUS_ACCESS_COMPLETE, Cart::STATUS_ACCESS_GRANTED]);
                         $q->whereHas('products', function($q) use($ids) {
                             $q->whereNotIn('id', $ids);
                         });
                     });
-                })->get();
+                });
             break;
             case 'in_form_entries':
-                $numbers = $query->whereHas('customer', function($q) use($ids) {
+                $query->whereHas('customer', function($q) use($ids) {
                     $q->whereHas('entries', function($q) use($ids) {
                         $q->whereIn('form_id', $ids);
                     });
-                })->get();
+                });
             break;
             case 'not_in_form_entries':
-                $numbers = $query->whereHas('user', function($q) use($ids) {
+                $query->whereHas('user', function($q) use($ids) {
                     $q->whereHas('entries', function($q) use($ids) {
                         $q->whereNotIn('form_id', $ids);
                     });
-                })->get();
+                });
             break;
             case 'in_form_entry_tags':
-                $numbers = $query->whereHas('user', function($q) use($ids) {
+                $query->whereHas('user', function($q) use($ids) {
                     $q->whereHas('entries', function($q) use($ids) {
                         $q->whereIn('tags', $ids);
                     });
-                })->get();
+                });
             break;
             case 'not_in_form_enty_tags':
-                $numbers = $query->whereHas('user', function($q) use($ids) {
+                $query->whereHas('user', function($q) use($ids) {
                     $q->whereHas('form_entries', function($q) use($ids) {
                         $q->whereNotIn('tags', $ids);
                     });
-                })->get();
+                });
             break;
         }
 
-        $msgIds = [];
+        /** @var IProfileUser|ICRUDUSer */
         $user = Auth::user();
-        foreach ($numbers as $number) {
-            if (!BaseFlags::isActive($number->flags, PhoneNumber::FLAGS_DO_NOT_CONTACT)) {
-                $smsMessage = SMSMessage::create([
-                    'author_id' => $user->id,
-                    'sms_gateway_id' => $request->getGatewayID(),
-                    'from' => 'Batch SMS: '.$user->id,
-                    'to' => $number->number,
-                    'message' => $request->getMessage(),
-                    'flags' => SMSMessage::FLAGS_BATCH_SEND,
-                    'status' => SMSMessage::STATUS_CREATED,
-                    'data' => [
-                        'mode' => 'batch',
-                    ]
-                ]);
-                $msgIds[] = $smsMessage->id;
-            }
+
+        $provider = new PhoneNumberCRUDProvider();
+        $query = $provider->onBeforeQuery($query);
+
+        if ($request->shouldFilterDomains()) {
+            $query->whereIn('domain_id', $request->getDomainIds());
         }
+        if ($request->shouldFilterRoles()) {
+            $query->whereHas('user.roles', function($q) use($request) {
+                $q->whereIn('id', $request->getRoleIds());
+            });
+        }
+        $from = $request->getRegisteredFrom();
+        $to = $request->getRegisteredTo();
+
+        if (!is_null($from) && !is_null($to)) {
+            $query->whereBetween('created_at', [$from, $to]);
+        } else if (!is_null($from)) {
+            $query->where('created_at', '>=', $from);
+        } else if (!is_null($to)) {
+            $query->where('created_at', '<=', $to);
+        }
+
+        $msgIds = [];
+        $query->chunk(100, function($numbers) use(&$msgIds, $user, $request) {
+            foreach ($numbers as $number) {
+                if (!BaseFlags::isActive($number->flags, PhoneNumber::FLAGS_DO_NOT_CONTACT)) {
+                    $smsMessage = SMSMessage::create([
+                        'author_id' => $user->id,
+                        'sms_gateway_id' => $request->getGatewayID(),
+                        'from' => 'Batch SMS: '.$user->id,
+                        'to' => $number->number,
+                        'message' => $request->getMessage(),
+                        'flags' => SMSMessage::FLAGS_BATCH_SEND,
+                        'status' => SMSMessage::STATUS_CREATED,
+                        'data' => [
+                            'mode' => 'batch',
+                        ]
+                    ]);
+                    $msgIds[] = $smsMessage->id;
+                }
+            }
+        });
         BatchSendSMS::dispatch($msgIds, $request->getGatewayID(), $user->name);
 
         return $msgIds;

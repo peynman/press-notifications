@@ -8,17 +8,17 @@
  * @version 1.2
  */
 
- namespace Larapress\Notifications\SMSService\Gateways\SMSIR;
+ namespace Larapress\Notifications\Services\SMSService\Gateways\SMSIR;
 
-class VerificationCode {
+class UltraFastSend {
 
 	/**
-	* gets API Verification Code Url.
+	* gets API Ultra Fast Send Url.
 	*
     * @return string Indicates the Url
 	*/
-	protected function getAPIVerificationCodeUrl() {
-		return "http://RestfulSms.com/api/VerificationCode";
+	protected function getAPIUltraFastSendUrl() {
+		return "http://RestfulSms.com/api/UltraFastSend";
 	}
 
 	/**
@@ -43,28 +43,23 @@ class VerificationCode {
     }
 
 	/**
-	* Verification Code.
+	* Ultra Fast Send Message.
 	*
-	* @param string $Code Code
-	* @param string $MobileNumber Mobile Number
+	* @param data[] $data array structure of message data
     * @return string Indicates the sent sms result
 	*/
-	public function VerificationCode($Code, $MobileNumber) {
-
+	public function UltraFastSend($data) {
 		$token = $this->GetToken($this->APIKey, $this->SecretKey);
 		if($token != false){
-			$postData = array(
-				'Code' => $Code,
-				'MobileNumber' => $MobileNumber,
-			);
+			$postData = $data;
 
-			$url = $this->getAPIVerificationCodeUrl();
-			$VerificationCode = $this->execute($postData, $url, $token);
-			$object = json_decode($VerificationCode);
+			$url = $this->getAPIUltraFastSendUrl();
+			$UltraFastSend = $this->execute($postData, $url, $token);
+			$object = json_decode($UltraFastSend);
 
-			if(is_object($object)){
+			if (is_object($object)) {
 				$array = get_object_vars($object);
-				if(is_array($array)){
+				if (is_array($array)){
 					$result = $array['Message'];
 				} else {
 					$result = false;
@@ -99,7 +94,7 @@ class VerificationCode {
 		curl_setopt($ch, CURLOPT_HEADER, false);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-		curl_setopt($ch, CURLOPT_POST, count($postString));
+		curl_setopt($ch, CURLOPT_POST, 1);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $postString);
 
 		$result = curl_exec($ch);
@@ -143,7 +138,7 @@ class VerificationCode {
 		curl_setopt($ch, CURLOPT_HEADER, false);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-		curl_setopt($ch, CURLOPT_POST, count($postString));
+		curl_setopt($ch, CURLOPT_POST, 1);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $postString);
 
 		$result = curl_exec($ch);

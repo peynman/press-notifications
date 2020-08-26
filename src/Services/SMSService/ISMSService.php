@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Larapress\Notifications\SMSService;
+namespace Larapress\Notifications\Services\SMSService;
 
 use Larapress\Profiles\Models\Domain;
 use Larapress\Notifications\Models\SMSMessage;
