@@ -7,6 +7,7 @@ use Larapress\Notifications\CRUD\NotificationCRUDProvider;
 use Larapress\Notifications\Services\Notifications\BatchSendNotificationRequest;
 use Larapress\Notifications\Services\Notifications\INotificationService;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 
 class NotificationController extends BaseCRUDController
 {
@@ -18,10 +19,20 @@ class NotificationController extends BaseCRUDController
             NotificationCRUDProvider::class,
             [
                 'send' => [
-                    'uses' => '\\'.self::class.'@sendBatchMessage',
+                    'uses' => '\\'.self::class.'@sendBatchNotification',
                     'methods' => ['POST'],
                     'url' => config('larapress.notifications.routes.notifications.name').'/send',
-                ]
+                ],
+                'any.dismiss' => [
+                    'uses' => '\\'.self::class.'@dismissNotification',
+                    'methods' => ['POST'],
+                    'url' => config('larapress.notifications.routes.notifications.name').'/dismiss/{notification_id}'
+                ],
+                'any.view' => [
+                    'uses' => '\\'.self::class.'@viewNotification',
+                    'methods' => ['POST'],
+                    'url' => config('larapress.notifications.routes.notifications.name').'/view/{notification_id}'
+                ],
             ]
         );
     }
@@ -33,7 +44,29 @@ class NotificationController extends BaseCRUDController
      * @param BatchSendNotificationRequest $request
      * @return Response
      */
-    public function sendBatchMessage(INotificationService $service, BatchSendNotificationRequest $request) {
+    public function sendBatchNotification(INotificationService $service, BatchSendNotificationRequest $request) {
         return $service->queueBatchNotifications($request);
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param INotificationService $service
+     * @param BatchSendNotificationRequest $request
+     * @return Response
+     */
+    public function dismissNotification(INotificationService $service, $notification_id) {
+        return $service->dismissNotificationForUser(Auth::user(), $notification_id);
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param INotificationService $service
+     * @param BatchSendNotificationRequest $request
+     * @return Response
+     */
+    public function viewNotification(INotificationService $service, $notification_id) {
+        return $service->viewNotificationForUser(Auth::user(), $notification_id);
     }
 }

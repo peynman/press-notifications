@@ -28,7 +28,8 @@ class NotificationCRUDProvider implements ICRUDProvider, IPermissionsMetadata
         'status'
     ];
 	public $validRelations = [
-        'author'
+        'author',
+        'user',
     ];
 	public $filterFields = [
         'author_id' => 'equals:author_id',

@@ -40,25 +40,27 @@ class BatchSendNotificationRequest extends FormRequest
             'message' => 'required|string',
             'data.type' => 'required|string',
             'data.link' => 'required|string',
-            'ids' => 'required',
-            'roles.*' => 'nullable|exists:roles,id',
-            'domains.*' => 'nullable|exists:domains,id',
+            'data.dismissable' => 'nullable',
+            'data.color' => 'nullable|string',
+            'ids' => 'required_unless:type,all_except_ids',
+            'roles.*.id' => 'nullable|exists:roles,id',
+            'domains.*.id' => 'nullable|exists:domains,id',
             'registration_after' => 'nullable|datetime_zoned',
             'registration_before' => 'nullable|datetime_zoned',
         ];
     }
 
     public function getIds() {
-        $ids = $this->request->get('ids');
+        $ids = $this->request->get('ids', []);
         if (is_string($ids)) {
             return explode(",", $ids);
         } else {
             if (!is_array($ids)) {
                 return [$ids];
             }
-
-            return $ids;
         }
+
+        return $ids;
     }
 
     public function getMessage() {
@@ -69,12 +71,37 @@ class BatchSendNotificationRequest extends FormRequest
         return $this->request->get('title');
     }
 
-    public function getData() {
-        return $this->request->get('data');
+    public function getType() {
+        return $this->request->get('type');
+    }
+
+    public function getLink() {
+        $data = $this->get('data', []);
+        return isset($data['link']) ? $data['link']: null;
+    }
+
+    public function getColor() {
+        $data = $this->get('data', []);
+        return isset($data['color']) ? $data['color']: null;
+    }
+
+    public function isDismissable() {
+        $data = $this->get('data', []);
+        return isset($data['dismissable']) ? $data['dismissable']: null;
+    }
+
+    public function getIcon() {
+        $data = $this->get('data', []);
+        return isset($data['icon']) ? $data['icon']: null;
     }
 
     public function getRoleIds() {
-        return array_keys($this->request->get('roles', []));
+        return array_values(array_keys($this->request->get('roles', [])));
+    }
+
+    public function getNotificationType() {
+        $data = $this->get('data', []);
+        return isset($data['type']) ? $data['type']: null;
     }
 
     public function getDomainIds() {

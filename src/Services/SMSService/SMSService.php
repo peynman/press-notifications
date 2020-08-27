@@ -60,12 +60,12 @@ class SMSService implements ISMSService
     /**
      * Undocumented function
      *
-     * @return SMSMessage[]
+     * @return array
      */
     public function queueSMSMessagesForRequest(BatchSendSMSRequest $request)
     {
         $ids = $request->getIds();
-        $query = PhoneNumber::select('number', 'user_id', 'flags');
+        $query = PhoneNumber::with('user')->select('number', 'user_id', 'flags');
 
         switch ($request->getType()) {
             case 'in_ids':
@@ -149,28 +149,50 @@ class SMSService implements ISMSService
             $query->where('created_at', '<=', $to);
         }
 
-        $msgIds = [];
-        $query->chunk(100, function($numbers) use(&$msgIds, $user, $request) {
+        $msgCounter = 0;
+        $query->chunk(100, function($numbers) use(&$msgCounter, $user, $request) {
+            $msgIds = [];
             foreach ($numbers as $number) {
                 if (!BaseFlags::isActive($number->flags, PhoneNumber::FLAGS_DO_NOT_CONTACT)) {
-                    $smsMessage = SMSMessage::create([
+                    $message = $this->getMessageForUser($request->getMessage(), $number->user);
+                    $msg = SMSMessage::create([
                         'author_id' => $user->id,
                         'sms_gateway_id' => $request->getGatewayID(),
                         'from' => 'Batch SMS: '.$user->id,
                         'to' => $number->number,
-                        'message' => $request->getMessage(),
+                        'message' => $message,
                         'flags' => SMSMessage::FLAGS_BATCH_SEND,
                         'status' => SMSMessage::STATUS_CREATED,
                         'data' => [
                             'mode' => 'batch',
                         ]
                     ]);
-                    $msgIds[] = $smsMessage->id;
+                    $msgCounter++;
+                    $msgIds[] = $msg->id;
                 }
             }
+            BatchSendSMS::dispatch($msgIds, $request->getGatewayID(), $user->name);
         });
-        BatchSendSMS::dispatch($msgIds, $request->getGatewayID(), $user->name);
 
-        return $msgIds;
+        return [
+            'message' => $msgCounter.' sms messages are queued'
+        ];
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param string $message
+     * @param IProfileUser $user
+     * @return string
+     */
+    public function getMessageForUser($message, $user) {
+        $firstname = isset($user->profile->data['values']['firstname']) ? $user->profile->data['values']['firstname'] : $user->name;
+        $lastname = isset($user->profile->data['values']['lastname']) ? $user->profile->data['values']['lastname'] : '';
+        $fullname = $firstname.' '.$lastname;
+        $message = str_replace($message, '$firstname', $firstname);
+        $message = str_replace($message, '$lastname', $lastname);
+        $message = str_replace($message, '$fullname', $fullname);
+        return $message;
     }
 }

@@ -36,7 +36,7 @@ class BatchSendSMSRequest extends FormRequest
                 'all_except_ids',
                 'in_ids'
             ]),
-            'ids' => 'required',
+            'ids' => 'required_unless:type,all_except_ids',
             'sms_message' => 'required',
             'gateway' => 'required|exists:sms_gateways,id',
             'roles.*' => 'nullable|exists:roles,id',
