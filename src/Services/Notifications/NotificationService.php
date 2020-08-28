@@ -36,31 +36,31 @@ class NotificationService implements INotificationService {
                 });
             break;
             case 'not_in_purchased_ids':
-                $query->whereHas('carts', function($q) use($ids) {
+                $query->whereDoesntHave('carts', function($q) use($ids) {
                     $q->whereIn('status', [Cart::STATUS_ACCESS_COMPLETE, Cart::STATUS_ACCESS_GRANTED]);
                     $q->whereHas('products', function($q) use($ids) {
-                        $q->whereNotIn('id', $ids);
+                        $q->whereIn('id', $ids);
                     });
                 });
             break;
             case 'in_form_entries':
-                $query->whereHas('entries', function($q) use($ids) {
+                $query->whereHas('form_entries', function($q) use($ids) {
                     $q->whereIn('form_id', $ids);
                 });
             break;
             case 'not_in_form_entries':
-                $query->whereHas('entries', function($q) use($ids) {
-                    $q->whereNotIn('form_id', $ids);
+                $query->whereDoesntHave('form_entries', function($q) use($ids) {
+                    $q->whereIn('form_id', $ids);
                 });
             break;
             case 'in_form_entry_tags':
-                $query->whereHas('entries', function($q) use($ids) {
+                $query->whereHas('form_entries', function($q) use($ids) {
                     $q->whereIn('tags', $ids);
                 });
             break;
             case 'not_in_form_enty_tags':
-                $query->whereHas('entries', function($q) use($ids) {
-                    $q->whereNotIn('tags', $ids);
+                $query->whereDoesntHave('form_entries', function($q) use($ids) {
+                    $q->whereIn('tags', $ids);
                 });
             break;
         }

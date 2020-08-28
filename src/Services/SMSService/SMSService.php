@@ -85,41 +85,31 @@ class SMSService implements ISMSService
                 });
             break;
             case 'not_in_purchased_ids':
-                $query->whereHas('customer', function($q) use($ids) {
-                    $q->whereHas('carts', function($q) use($ids) {
-                        $q->whereIn('status', [Cart::STATUS_ACCESS_COMPLETE, Cart::STATUS_ACCESS_GRANTED]);
-                        $q->whereHas('products', function($q) use($ids) {
-                            $q->whereNotIn('id', $ids);
-                        });
+                $query->whereDoesntHave('customer.carts', function($q) use($ids) {
+                    $q->whereIn('status', [Cart::STATUS_ACCESS_COMPLETE, Cart::STATUS_ACCESS_GRANTED]);
+                    $q->whereHas('products', function($q) use($ids) {
+                        $q->whereIn('id', $ids);
                     });
                 });
             break;
             case 'in_form_entries':
-                $query->whereHas('customer', function($q) use($ids) {
-                    $q->whereHas('entries', function($q) use($ids) {
-                        $q->whereIn('form_id', $ids);
-                    });
+                $query->whereHas('customer.form_entries', function($q) use($ids) {
+                    $q->whereIn('form_id', $ids);
                 });
             break;
             case 'not_in_form_entries':
-                $query->whereHas('user', function($q) use($ids) {
-                    $q->whereHas('entries', function($q) use($ids) {
-                        $q->whereNotIn('form_id', $ids);
-                    });
+                $query->whereDoesntHave('user.form_entries', function($q) use($ids) {
+                    $q->whereIn('form_id', $ids);
                 });
             break;
             case 'in_form_entry_tags':
-                $query->whereHas('user', function($q) use($ids) {
-                    $q->whereHas('entries', function($q) use($ids) {
-                        $q->whereIn('tags', $ids);
-                    });
+                $query->whereHas('user.form_entries', function($q) use($ids) {
+                    $q->whereIn('tags', $ids);
                 });
             break;
             case 'not_in_form_enty_tags':
-                $query->whereHas('user', function($q) use($ids) {
-                    $q->whereHas('form_entries', function($q) use($ids) {
-                        $q->whereNotIn('tags', $ids);
-                    });
+                $query->whereDoesntHave('user.form_entries', function($q) use($ids) {
+                    $q->whereIn('tags', $ids);
                 });
             break;
         }
