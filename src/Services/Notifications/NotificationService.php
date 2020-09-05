@@ -119,7 +119,9 @@ class NotificationService implements INotificationService {
         });
 
         return [
-            'message' => $notifyCounter.' notifications are queued'
+            'message' => trans('larapress::notifications.api.notify_queue_success', [
+                'count' => $notifyCounter
+            ])
         ];
     }
 
@@ -140,7 +142,7 @@ class NotificationService implements INotificationService {
         }
 
         return [
-            'message' => 'notification dismissed'
+            'message' => trans('larapress::notifications.api.notify_dismiss_success')
         ];
     }
 

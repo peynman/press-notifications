@@ -165,7 +165,9 @@ class SMSService implements ISMSService
         });
 
         return [
-            'message' => $msgCounter.' sms messages are queued'
+            'message' => trans('larapress::notifications.api.sms_queue_success', [
+                'count' => $msgCounter
+            ])
         ];
     }
 
