@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Larapress\CRUD\BaseFlags;
 use Larapress\CRUD\Events\CRUDUpdated;
+use Larapress\CRUD\Exceptions\AppException;
 use Larapress\Notifications\CRUD\SMSMessageCRUDProvider;
 use Larapress\Notifications\Models\SMSGatewayData;
 

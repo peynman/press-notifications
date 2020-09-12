@@ -38,6 +38,7 @@ class PackageServiceProvider extends ServiceProvider
     public function boot(BroadcastManager $broadcastManager)
     {
         $this->loadMigrationsFrom(__DIR__.'/../../migrations');
+        $this->loadTranslationsFrom(__DIR__.'/../../resources/lang', 'larapress');
 
         $this->publishes([
             __DIR__.'/../../config/notifications.php' => config_path('larapress/notifications.php'),

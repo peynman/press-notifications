@@ -173,8 +173,8 @@ class NotificationService implements INotificationService {
      * @return string
      */
     public function getMessageForUser($message, $user) {
-        $firstname = isset($user->profile->data['values']['firstname']) ? $user->profile->data['values']['firstname'] : $user->name;
-        $lastname = isset($user->profile->data['values']['lastname']) ? $user->profile->data['values']['lastname'] : '';
+        $firstname = isset($user->profile['data']['values']['firstname']) ? $user->profile['data']['values']['firstname'] : $user->name;
+        $lastname = isset($user->profile['data']['values']['lastname']) ? $user->profile['data']['values']['lastname'] : '';
         $fullname = $firstname.' '.$lastname;
         $message = str_replace('$firstname', $firstname, $message);
         $message = str_replace('$lastname', $lastname, $message);

@@ -64,6 +64,7 @@ class SMSService implements ISMSService
      */
     public function queueSMSMessagesForRequest(BatchSendSMSRequest $request)
     {
+        ini_set('max_execution_time', 0);
         $ids = $request->getIds();
         $query = PhoneNumber::with('user')->select('number', 'user_id', 'flags');
 
@@ -179,12 +180,13 @@ class SMSService implements ISMSService
      * @return string
      */
     public function getMessageForUser($message, $user) {
-        $firstname = isset($user->profile->data['values']['firstname']) ? $user->profile->data['values']['firstname'] : $user->name;
-        $lastname = isset($user->profile->data['values']['lastname']) ? $user->profile->data['values']['lastname'] : '';
+        $firstname = isset($user->profile['data']['values']['firstname']) ? $user->profile['data']['values']['firstname'] : $user->name;
+        $lastname = isset($user->profile['data']['values']['lastname']) ? $user->profile['data']['values']['lastname'] : '';
         $fullname = $firstname.' '.$lastname;
-        $message = str_replace($message, '$firstname', $firstname);
-        $message = str_replace($message, '$lastname', $lastname);
-        $message = str_replace($message, '$fullname', $fullname);
+        $message = str_replace('$firstname', $firstname, $message);
+        $message = str_replace('$lastname', $lastname, $message);
+        $message = str_replace('$fullname', $fullname, $message);
+
         return $message;
     }
 }
