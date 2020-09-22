@@ -61,7 +61,7 @@ class BatchSendSMS implements ShouldQueue
 
         $service->startSyncronizedTaskReport(
             'send-sms',
-            'batch-send-sms-'.$this->sender,
+            'batch-send-sms-'.$this->sender->id,
             'Sending messages...',
             [],
             function ($onUpdated, $onSuccess, $onFailed) use ($gatewayData) {
@@ -88,7 +88,7 @@ class BatchSendSMS implements ShouldQueue
                                 'data' => $data,
                             ]);
 
-                            CRUDUpdated::dispatch($message, SMSMessageCRUDProvider::class, $now);
+                            CRUDUpdated::dispatch($this->sender, $message, SMSMessageCRUDProvider::class, $now);
                         }
                     });
                     $onSuccess('Finished', []);

@@ -39,8 +39,8 @@ class BatchSendSMSRequest extends FormRequest
             'ids' => 'required_unless:type,all_except_ids',
             'sms_message' => 'required',
             'gateway' => 'required|exists:sms_gateways,id',
-            'roles.*' => 'nullable|exists:roles,id',
-            'domains.*' => 'nullable|exists:domains,id',
+            'roles.*.id' => 'nullable|exists:roles,id',
+            'domains.*.id' => 'nullable|exists:domains,id',
             'from' => 'nullable|datetime_zoned',
             'to' => 'nullable|datetime_zoned',
         ];

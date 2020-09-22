@@ -162,7 +162,7 @@ class SMSService implements ISMSService
                     $msgIds[] = $msg->id;
                 }
             }
-            BatchSendSMS::dispatch($msgIds, $request->getGatewayID(), $user->name);
+            BatchSendSMS::dispatch($msgIds, $request->getGatewayID(), $user);
         });
 
         return [
@@ -186,6 +186,7 @@ class SMSService implements ISMSService
         $message = str_replace('$firstname', $firstname, $message);
         $message = str_replace('$lastname', $lastname, $message);
         $message = str_replace('$fullname', $fullname, $message);
+        $message = str_replace('$id', $user->id, $message);
 
         return $message;
     }

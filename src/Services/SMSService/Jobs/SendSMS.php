@@ -77,11 +77,12 @@ class SendSMS implements ShouldQueue
                 'data' => $data,
             ]);
 
-            CRUDUpdated::dispatch($this->message, SMSMessageCRUDProvider::class, $now);
+            CRUDUpdated::dispatch($this->message->author, $this->message, SMSMessageCRUDProvider::class, $now);
 	    } catch (\Exception $e) {
 	    	$this->message->update([
 	    		'status' => SMSMessage::STATUS_FAILED_SEND,
             ]);
+            CRUDUpdated::dispatch($this->message->author, $this->message, SMSMessageCRUDProvider::class, $now);
             Log::critical('SMS Send Failed: '.$e->getMessage(), $e->getTrace());
             throw new AppException(AppException::ERR_REJECTED_RESULT);
 	    }

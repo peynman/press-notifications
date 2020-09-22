@@ -100,7 +100,8 @@ class UltraFastSend {
 		$result = curl_exec($ch);
 		curl_close($ch);
 
-		$response = json_decode($result);
+        $response = json_decode($result);
+        $resp = false;
 
 		if(is_object($response)){
 			$resultVars = get_object_vars($response);
