@@ -119,7 +119,7 @@ class BatchSendNotificationRequest extends FormRequest
     public function getRegisteredFrom() {
         $time = $this->request->get('from', null);
         if (!is_null($time)) {
-            $time = Carbon::createFromFormat("Y-m-d\TH:i:sO", $time);
+            $time = Carbon::createFromFormat(config('larapress.crud.datetime-format'), $time);
         }
         return $time;
     }
@@ -127,7 +127,7 @@ class BatchSendNotificationRequest extends FormRequest
     public function getRegisteredTo() {
         $time = $this->request->get('to', null);
         if (!is_null($time)) {
-            $time = Carbon::createFromFormat("Y-m-d\TH:i:sO", $time);
+            $time = Carbon::createFromFormat(config('larapress.crud.datetime-format'), $time);
         }
         return $time;
     }

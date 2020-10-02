@@ -65,7 +65,6 @@ class NotificationService implements INotificationService {
             break;
         }
 
-
         $provider = new UserCRUDProvider();
         $query = $provider->onBeforeQuery($query);
 
