@@ -23,6 +23,11 @@ class NotificationController extends BaseCRUDController
                     'methods' => ['POST'],
                     'url' => config('larapress.notifications.routes.notifications.name').'/send',
                 ],
+                'export' => [
+                    'uses' => '\\'.self::class.'@exportNotificationUsers',
+                    'methods' => ['POST'],
+                    'url' => config('larapress.notifications.routes.notifications.name').'/export',
+                ],
                 'any.dismiss' => [
                     'uses' => '\\'.self::class.'@dismissNotification',
                     'methods' => ['POST'],
@@ -35,6 +40,19 @@ class NotificationController extends BaseCRUDController
                 ],
             ]
         );
+    }
+
+
+
+    /**
+     * Undocumented function
+     *
+     * @param INotificationService $service
+     * @param BatchSendNotificationRequest $request
+     * @return Response
+     */
+    public function exportNotificationUsers(INotificationService $service, BatchSendNotificationRequest $request) {
+        return $service->exportNotificationUsers($request);
     }
 
     /**

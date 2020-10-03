@@ -3,8 +3,18 @@
 namespace Larapress\Notifications\Services\Notifications;
 
 use Larapress\Profiles\IProfileUser;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 interface INotificationService {
+
+    /**
+     * Undocumented function
+     *
+     * @param BatchSendNotificationRequest $request
+     * @return StreamedResponse
+     */
+    public function exportNotificationUsers(BatchSendNotificationRequest $request);
+
     /**
      * Undocumented function
      *

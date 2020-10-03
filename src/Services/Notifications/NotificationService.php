@@ -7,8 +7,45 @@ use Larapress\ECommerce\Models\Cart;
 use Larapress\Notifications\Models\Notification;
 use Larapress\Profiles\CRUD\UserCRUDProvider;
 use Larapress\Profiles\IProfileUser;
+use Larapress\CRUD\Services\ICRUDProvider;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class NotificationService implements INotificationService {
+
+
+
+    /**
+     * Undocumented function
+     *
+     * @param BatchSendNotificationRequest $request
+     * @return StreamedResponse
+     */
+    public function exportNotificationUsers(BatchSendNotificationRequest $request) {
+        ini_set('memory_limit', '1G');
+        ini_set('max_execution_time', 0);
+        $query = $this->getUsersForBatchRequest($request);
+
+        $providerClass = config('larapress.crud.user.crud-provider');
+        /** @var ICRUDProvider */
+        $provider = new $providerClass();
+
+        return new StreamedResponse(function () use ($query, $provider) {
+            $FH = fopen('php://output', 'w');
+            $query->chunk(100, function($users) use($FH, $provider) {
+                foreach ($users as $user) {
+                    fputcsv($FH, $provider->getExportArray($user));
+                }
+            });
+            fclose($FH);
+        }, 200, [
+            'Cache-Control'       => 'must-revalidate, post-check=0, pre-check=0',
+            'Content-type'        => 'text/csv',
+            'Content-Disposition' => 'attachment; filename=export.csv',
+            'Expires'             => '0',
+            'Pragma'              => 'public'
+        ]);
+    }
+
     /**
      * Undocumented function
      *
@@ -16,6 +53,44 @@ class NotificationService implements INotificationService {
      * @return Notification[]
      */
     public function queueBatchNotifications(BatchSendNotificationRequest $request) {
+        $query = $this->getUsersForBatchRequest($request);
+
+        $notifyCounter = 0;
+        $author = Auth::user();
+        $query->chunk(100, function($users) use($author, $request, &$notifyCounter) {
+            foreach ($users as $user) {
+                $message = $this->getMessageForUser($request->getMessage(), $user);
+                $title = $this->getMessageForUser($request->getTitle(), $user);
+                $link = $this->getLinkForUser($request->getLink(), $user);
+                $data = [
+                    'author_id' => $author->id,
+                    'user_id' => $user->id,
+                    'title' => $title,
+                    'message' => $message,
+                    'data' => [
+                        'link' => $link,
+                        'icon' => $request->getIcon(),
+                        'color' => $request->getColor(),
+                        'type' => $request->getNotificationType(),
+                        'dismissable' => $request->isDismissable(),
+                    ],
+                    'flags' => 0,
+                    'status' => Notification::STATUS_UNSEEN,
+                ];
+
+                Notification::create($data);
+                $notifyCounter++;
+            }
+        });
+
+        return [
+            'message' => trans('larapress::notifications.api.notify_queue_success', [
+                'count' => $notifyCounter
+            ])
+        ];
+    }
+
+    protected function getUsersForBatchRequest(BatchSendNotificationRequest $request) {
         $ids = $request->getIds();
         $class = config('larapress.crud.user.class');
         $query = call_user_func([$class, 'select'], 'id', 'name');
@@ -89,41 +164,8 @@ class NotificationService implements INotificationService {
             $query->where('created_at', '<=', $to);
         }
 
-        $notifyCounter = 0;
-        $author = Auth::user();
-        $query->chunk(100, function($users) use($author, $request, &$notifyCounter) {
-            foreach ($users as $user) {
-                $message = $this->getMessageForUser($request->getMessage(), $user);
-                $title = $this->getMessageForUser($request->getTitle(), $user);
-                $link = $this->getLinkForUser($request->getLink(), $user);
-                $data = [
-                    'author_id' => $author->id,
-                    'user_id' => $user->id,
-                    'title' => $title,
-                    'message' => $message,
-                    'data' => [
-                        'link' => $link,
-                        'icon' => $request->getIcon(),
-                        'color' => $request->getColor(),
-                        'type' => $request->getNotificationType(),
-                        'dismissable' => $request->isDismissable(),
-                    ],
-                    'flags' => 0,
-                    'status' => Notification::STATUS_UNSEEN,
-                ];
-
-                Notification::create($data);
-                $notifyCounter++;
-            }
-        });
-
-        return [
-            'message' => trans('larapress::notifications.api.notify_queue_success', [
-                'count' => $notifyCounter
-            ])
-        ];
+        return $query;
     }
-
 
     /**
      * Undocumented function
