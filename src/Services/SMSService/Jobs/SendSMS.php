@@ -56,6 +56,7 @@ class SendSMS implements ShouldQueue
             throw new Exception("SMS Message does not have an active gateway");
         }
 
+        $now = Carbon::now();
 	    try {
             /** @var ISMSGateway */
             $gateway = $gatewayData->getGateway();
@@ -70,7 +71,6 @@ class SendSMS implements ShouldQueue
             }
             $data['provider_event_id'] = $msg_id;
 
-            $now = Carbon::now();
 	        $this->message->update([
 	        	'status' => SMSMessage::STATUS_SENT,
                 'sent_at' => $now,

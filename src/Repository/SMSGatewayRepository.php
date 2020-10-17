@@ -78,7 +78,29 @@ class SMSGatewayRepository implements ISMSGatewayRepository
                     'label' => 'Template ID',
                 ]
             ],
-            'nexmo' => []
+            'nexmo' => [],
+            'mizbansms' => [
+                'username' => [
+                    'type' => 'input',
+                    'input' => 'text',
+                    'label' => 'Username'
+                ],
+                'password' => [
+                    'type' => 'input',
+                    'input' => 'text',
+                    'label' => 'Password'
+                ],
+                'line_number' => [
+                    'type' => 'input',
+                    'input' => 'text',
+                    'label' => 'Line number'
+                ],
+                'api' => [
+                    'type' => 'input',
+                    'input' => 'text',
+                    'label' => 'API'
+                ],
+            ]
         ];
     }
 

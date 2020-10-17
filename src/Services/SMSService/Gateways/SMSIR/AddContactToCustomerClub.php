@@ -9,7 +9,7 @@
  */
 
 class SmsIR_AddContactToCustomerClub {
-	
+
 	/**
 	* gets API Customer Club Contact Url.
 	*
@@ -27,7 +27,7 @@ class SmsIR_AddContactToCustomerClub {
 	protected function getApiTokenUrl(){
 		return "http://RestfulSms.com/api/Token";
 	}
-	
+
 	/**
 	* gets config parameters for sending request.
 	*
@@ -38,7 +38,7 @@ class SmsIR_AddContactToCustomerClub {
     public function __construct($APIKey,$SecretKey){
 		$this->APIKey = $APIKey;
 		$this->SecretKey = $SecretKey;
-    }	
+    }
 
 	/**
 	* Add Contact To Customer Club.
@@ -52,7 +52,7 @@ class SmsIR_AddContactToCustomerClub {
     * @return string Indicates the sent sms result
 	*/
 	public function AddContactToCustomerClub($Prefix, $FirstName, $LastName, $Mobile, $BirthDay, $CategoryId) {
-		
+
 		$token = $this->GetToken($this->APIKey, $this->SecretKey);
 		if($token != false){
 			$postData = array(
@@ -63,11 +63,11 @@ class SmsIR_AddContactToCustomerClub {
 				'BirthDay' => $BirthDay,
 				'CategoryId' => $CategoryId
 			);
-			
+
 			$url = $this->getAPICustomerClubContactUrl();
 			$AddContactToCustomerClub = $this->execute($postData, $url, $token);
 			$object = json_decode($AddContactToCustomerClub);
-			
+
 			if(is_object($object)){
 				$array = get_object_vars($object);
 				if(is_array($array)){
@@ -78,13 +78,13 @@ class SmsIR_AddContactToCustomerClub {
 			} else {
 				$result = false;
 			}
-			
+
 		} else {
 			$result = false;
 		}
 		return $result;
 	}
-	
+
 	/**
 	* gets token key for all web service requests.
 	*
@@ -101,18 +101,18 @@ class SmsIR_AddContactToCustomerClub {
 		$ch = curl_init($this->getApiTokenUrl());
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array(
                                             'Content-Type: application/json'
-                                            ));		
+                                            ));
 		curl_setopt($ch, CURLOPT_HEADER, false);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
 		curl_setopt($ch, CURLOPT_POST, count($postString));
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $postString);
-		
+
 		$result = curl_exec($ch);
 		curl_close($ch);
-		
+
 		$response = json_decode($result);
-		
+
 		if(is_object($response)){
 			$resultVars = get_object_vars($response);
 			if(is_array($resultVars)){
@@ -125,10 +125,10 @@ class SmsIR_AddContactToCustomerClub {
 				}
 			}
 		}
-		
+
 		return $resp;
 	}
-	
+
 	/**
 	* executes the main method.
 	*
@@ -138,23 +138,23 @@ class SmsIR_AddContactToCustomerClub {
     * @return string Indicates the curl execute result
 	*/
 	private function execute($postData, $url, $token){
-		
+
 		$postString = json_encode($postData);
 
 		$ch = curl_init($url);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array(
 											'Content-Type: application/json',
 											'x-sms-ir-secure-token: '.$token
-											));		
+											));
 		curl_setopt($ch, CURLOPT_HEADER, false);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
 		curl_setopt($ch, CURLOPT_POST, count($postString));
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $postString);
-		
+
 		$result = curl_exec($ch);
 		curl_close($ch);
-		
+
 		return $result;
 	}
 }
