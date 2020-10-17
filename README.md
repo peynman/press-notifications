@@ -1,6 +1,6 @@
 # W.I.P.
 
-# Larapress Authentication
+# Larapress Notifications
 A package to provide SMS, Email, Notifications services with Larapress CRUD API.
 
 ## Dependencies
