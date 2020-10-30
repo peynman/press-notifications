@@ -112,6 +112,7 @@ class SendMessage {
 
 		$response = json_decode($result);
 
+        $resp = false;
 		if(is_object($response)){
 			$resultVars = get_object_vars($response);
 			if(is_array($resultVars)){
