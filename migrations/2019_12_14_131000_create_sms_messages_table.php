@@ -24,14 +24,24 @@ class CreateSmsMessagesTable extends Migration
             $table->timestamp('sent_at')->nullable();
             $table->smallInteger('status', false, true)->default(1);
             $table->integer('flags')->default(0);
-	        $table->json('data')->nullable();
+            $table->json('data')->nullable();
             $table->timestamps();
             $table->softDeletes();
 
-            $table->index(['from', 'to']);
+            $table->index([
+                'deleted_at',
+                'created_at',
+                'updated_at',
+                'sms_gateway_id',
+                'author_id',
+                'status',
+                'from',
+                'to',
+                'flags'
+            ]);
 
             $table->foreign('sms_gateway_id')->references('id')->on('sms_gateways');
-	        $table->foreign('author_id')->references('id')->on('users');
+            $table->foreign('author_id')->references('id')->on('users');
         });
     }
 

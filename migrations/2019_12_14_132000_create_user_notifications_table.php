@@ -21,12 +21,22 @@ class CreateUserNotificationsTable extends Migration
             $table->string('message');
             $table->smallInteger('status', false, true)->default(1);
             $table->integer('flags')->default(0);
-	        $table->json('data')->nullable();
+            $table->json('data')->nullable();
             $table->timestamps();
             $table->softDeletes();
 
-	        $table->foreign('user_id')->references('id')->on('users');
-	        $table->foreign('author_id')->references('id')->on('users');
+            $table->index([
+                'deleted_at',
+                'created_at',
+                'updated_at',
+                'author_id',
+                'user_id',
+                'status',
+                'flags'
+            ]);
+
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('author_id')->references('id')->on('users');
         });
     }
 
