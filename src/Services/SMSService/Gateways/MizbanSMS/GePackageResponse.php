@@ -15,7 +15,6 @@ class GePackageResponse
      */
     public function __construct($GePackageResult)
     {
-      $this->GePackageResult = $GePackageResult;
+        $this->GePackageResult = $GePackageResult;
     }
-
 }

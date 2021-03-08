@@ -15,7 +15,6 @@ class GeSMSNumberResponse
      */
     public function __construct($GeSMSNumberResult)
     {
-      $this->GeSMSNumberResult = $GeSMSNumberResult;
+        $this->GeSMSNumberResult = $GeSMSNumberResult;
     }
-
 }

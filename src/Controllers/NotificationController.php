@@ -51,7 +51,8 @@ class NotificationController extends BaseCRUDController
      * @param BatchSendNotificationRequest $request
      * @return Response
      */
-    public function exportNotificationUsers(INotificationService $service, BatchSendNotificationRequest $request) {
+    public function exportNotificationUsers(INotificationService $service, BatchSendNotificationRequest $request)
+    {
         return $service->exportNotificationUsers($request);
     }
 
@@ -62,7 +63,8 @@ class NotificationController extends BaseCRUDController
      * @param BatchSendNotificationRequest $request
      * @return Response
      */
-    public function sendBatchNotification(INotificationService $service, BatchSendNotificationRequest $request) {
+    public function sendBatchNotification(INotificationService $service, BatchSendNotificationRequest $request)
+    {
         return $service->queueBatchNotifications($request);
     }
 
@@ -73,7 +75,8 @@ class NotificationController extends BaseCRUDController
      * @param BatchSendNotificationRequest $request
      * @return Response
      */
-    public function dismissNotification(INotificationService $service, $notification_id) {
+    public function dismissNotification(INotificationService $service, $notification_id)
+    {
         return $service->dismissNotificationForUser(Auth::user(), $notification_id);
     }
 
@@ -84,7 +87,8 @@ class NotificationController extends BaseCRUDController
      * @param BatchSendNotificationRequest $request
      * @return Response
      */
-    public function viewNotification(INotificationService $service, $notification_id) {
+    public function viewNotification(INotificationService $service, $notification_id)
+    {
         return $service->viewNotificationForUser(Auth::user(), $notification_id);
     }
 }

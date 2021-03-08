@@ -36,10 +36,9 @@ class QueryPackage
      */
     public function __construct($Name, $Price, $MinSale, $tariff)
     {
-      $this->Name = $Name;
-      $this->Price = $Price;
-      $this->MinSale = $MinSale;
-      $this->tariff = $tariff;
+        $this->Name = $Name;
+        $this->Price = $Price;
+        $this->MinSale = $MinSale;
+        $this->tariff = $tariff;
     }
-
 }

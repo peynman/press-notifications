@@ -15,7 +15,6 @@ class SendBulkSmsResponse
      */
     public function __construct($SendBulkSmsResult)
     {
-      $this->SendBulkSmsResult = $SendBulkSmsResult;
+        $this->SendBulkSmsResult = $SendBulkSmsResult;
     }
-
 }

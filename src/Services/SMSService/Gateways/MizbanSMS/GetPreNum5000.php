@@ -8,7 +8,5 @@ class GetPreNum5000
      */
     public function __construct()
     {
-    
     }
-
 }

@@ -195,13 +195,13 @@ class WSSMS extends \SoapClient
      */
     public function __construct(array $options = array(), $wsdl = 'http://my.mizbansms.ir/wssms.asmx?WSDL')
     {
-      foreach (self::$classmap as $key => $value) {
-        if (!isset($options['classmap'][$key])) {
-          $options['classmap'][$key] = $value;
+        foreach (self::$classmap as $key => $value) {
+            if (!isset($options['classmap'][$key])) {
+                $options['classmap'][$key] = $value;
+            }
         }
-      }
       
-      parent::__construct($wsdl, $options);
+        parent::__construct($wsdl, $options);
     }
 
     /**
@@ -213,7 +213,7 @@ class WSSMS extends \SoapClient
      */
     public function GeSMSNumber(GeSMSNumber $parameters)
     {
-      return $this->__soapCall('GeSMSNumber', array($parameters));
+        return $this->__soapCall('GeSMSNumber', array($parameters));
     }
 
     /**
@@ -225,7 +225,7 @@ class WSSMS extends \SoapClient
      */
     public function GetMessageStatus(GetMessageStatus $parameters)
     {
-      return $this->__soapCall('GetMessageStatus', array($parameters));
+        return $this->__soapCall('GetMessageStatus', array($parameters));
     }
 
     /**
@@ -237,7 +237,7 @@ class WSSMS extends \SoapClient
      */
     public function GetMessageStatuses21(GetMessageStatuses21 $parameters)
     {
-      return $this->__soapCall('GetMessageStatuses21', array($parameters));
+        return $this->__soapCall('GetMessageStatuses21', array($parameters));
     }
 
     /**
@@ -249,7 +249,7 @@ class WSSMS extends \SoapClient
      */
     public function GetMessageStatuses50004(GetMessageStatuses50004 $parameters)
     {
-      return $this->__soapCall('GetMessageStatuses50004', array($parameters));
+        return $this->__soapCall('GetMessageStatuses50004', array($parameters));
     }
 
     /**
@@ -261,7 +261,7 @@ class WSSMS extends \SoapClient
      */
     public function GetMessageStatuses(GetMessageStatuses $parameters)
     {
-      return $this->__soapCall('GetMessageStatuses', array($parameters));
+        return $this->__soapCall('GetMessageStatuses', array($parameters));
     }
 
     /**
@@ -273,7 +273,7 @@ class WSSMS extends \SoapClient
      */
     public function GetPreNum(GetPreNum $parameters)
     {
-      return $this->__soapCall('GetPreNum', array($parameters));
+        return $this->__soapCall('GetPreNum', array($parameters));
     }
 
     /**
@@ -285,7 +285,7 @@ class WSSMS extends \SoapClient
      */
     public function GetPreNum5000(GetPreNum5000 $parameters)
     {
-      return $this->__soapCall('GetPreNum5000', array($parameters));
+        return $this->__soapCall('GetPreNum5000', array($parameters));
     }
 
     /**
@@ -297,7 +297,7 @@ class WSSMS extends \SoapClient
      */
     public function GetFreeNum(GetFreeNum $parameters)
     {
-      return $this->__soapCall('GetFreeNum', array($parameters));
+        return $this->__soapCall('GetFreeNum', array($parameters));
     }
 
     /**
@@ -309,7 +309,7 @@ class WSSMS extends \SoapClient
      */
     public function GetFreeNum5000(GetFreeNum5000 $parameters)
     {
-      return $this->__soapCall('GetFreeNum5000', array($parameters));
+        return $this->__soapCall('GetFreeNum5000', array($parameters));
     }
 
     /**
@@ -321,7 +321,7 @@ class WSSMS extends \SoapClient
      */
     public function GePackage(GePackage $parameters)
     {
-      return $this->__soapCall('GePackage', array($parameters));
+        return $this->__soapCall('GePackage', array($parameters));
     }
 
     /**
@@ -333,7 +333,7 @@ class WSSMS extends \SoapClient
      */
     public function sendsmsSimCard(sendsmsSimCard $parameters)
     {
-      return $this->__soapCall('sendsmsSimCard', array($parameters));
+        return $this->__soapCall('sendsmsSimCard', array($parameters));
     }
 
     /**
@@ -345,7 +345,7 @@ class WSSMS extends \SoapClient
      */
     public function sendsms2(sendsms2 $parameters)
     {
-      return $this->__soapCall('sendsms2', array($parameters));
+        return $this->__soapCall('sendsms2', array($parameters));
     }
 
     /**
@@ -357,7 +357,7 @@ class WSSMS extends \SoapClient
      */
     public function sendsms(sendsms $parameters)
     {
-      return $this->__soapCall('sendsms', array($parameters));
+        return $this->__soapCall('sendsms', array($parameters));
     }
 
     /**
@@ -369,7 +369,7 @@ class WSSMS extends \SoapClient
      */
     public function Delsendsmsfuture(Delsendsmsfuture $parameters)
     {
-      return $this->__soapCall('Delsendsmsfuture', array($parameters));
+        return $this->__soapCall('Delsendsmsfuture', array($parameters));
     }
 
     /**
@@ -381,7 +381,7 @@ class WSSMS extends \SoapClient
      */
     public function sendsmsfuture(sendsmsfuture $parameters)
     {
-      return $this->__soapCall('sendsmsfuture', array($parameters));
+        return $this->__soapCall('sendsmsfuture', array($parameters));
     }
 
     /**
@@ -393,7 +393,7 @@ class WSSMS extends \SoapClient
      */
     public function sendsmsfuture2(sendsmsfuture2 $parameters)
     {
-      return $this->__soapCall('sendsmsfuture2', array($parameters));
+        return $this->__soapCall('sendsmsfuture2', array($parameters));
     }
 
     /**
@@ -405,7 +405,7 @@ class WSSMS extends \SoapClient
      */
     public function NazirSend(NazirSend $parameters)
     {
-      return $this->__soapCall('NazirSend', array($parameters));
+        return $this->__soapCall('NazirSend', array($parameters));
     }
 
     /**
@@ -417,7 +417,7 @@ class WSSMS extends \SoapClient
      */
     public function smscounter(smscounter $parameters)
     {
-      return $this->__soapCall('smscounter', array($parameters));
+        return $this->__soapCall('smscounter', array($parameters));
     }
 
     /**
@@ -429,7 +429,7 @@ class WSSMS extends \SoapClient
      */
     public function Credites(Credites $parameters)
     {
-      return $this->__soapCall('Credites', array($parameters));
+        return $this->__soapCall('Credites', array($parameters));
     }
 
     /**
@@ -441,7 +441,7 @@ class WSSMS extends \SoapClient
      */
     public function GetAllMessageArray(GetAllMessageArray $parameters)
     {
-      return $this->__soapCall('GetAllMessageArray', array($parameters));
+        return $this->__soapCall('GetAllMessageArray', array($parameters));
     }
 
     /**
@@ -453,7 +453,7 @@ class WSSMS extends \SoapClient
      */
     public function GetBankId(GetBankId $parameters)
     {
-      return $this->__soapCall('GetBankId', array($parameters));
+        return $this->__soapCall('GetBankId', array($parameters));
     }
 
     /**
@@ -465,7 +465,7 @@ class WSSMS extends \SoapClient
      */
     public function GetCountSms(GetCountSms $parameters)
     {
-      return $this->__soapCall('GetCountSms', array($parameters));
+        return $this->__soapCall('GetCountSms', array($parameters));
     }
 
     /**
@@ -477,7 +477,7 @@ class WSSMS extends \SoapClient
      */
     public function SendBulkSms(SendBulkSms $parameters)
     {
-      return $this->__soapCall('SendBulkSms', array($parameters));
+        return $this->__soapCall('SendBulkSms', array($parameters));
     }
 
     /**
@@ -489,7 +489,7 @@ class WSSMS extends \SoapClient
      */
     public function GetAllMessage(GetAllMessage $parameters)
     {
-      return $this->__soapCall('GetAllMessage', array($parameters));
+        return $this->__soapCall('GetAllMessage', array($parameters));
     }
 
     /**
@@ -501,7 +501,7 @@ class WSSMS extends \SoapClient
      */
     public function GetUserExp(GetUserExp $parameters)
     {
-      return $this->__soapCall('GetUserExp', array($parameters));
+        return $this->__soapCall('GetUserExp', array($parameters));
     }
 
     /**
@@ -513,7 +513,7 @@ class WSSMS extends \SoapClient
      */
     public function GetUserContact(GetUserContact $parameters)
     {
-      return $this->__soapCall('GetUserContact', array($parameters));
+        return $this->__soapCall('GetUserContact', array($parameters));
     }
 
     /**
@@ -525,7 +525,7 @@ class WSSMS extends \SoapClient
      */
     public function GetUserContactArray(GetUserContactArray $parameters)
     {
-      return $this->__soapCall('GetUserContactArray', array($parameters));
+        return $this->__soapCall('GetUserContactArray', array($parameters));
     }
 
     /**
@@ -537,7 +537,7 @@ class WSSMS extends \SoapClient
      */
     public function GetUserNumberArray(GetUserNumberArray $parameters)
     {
-      return $this->__soapCall('GetUserNumberArray', array($parameters));
+        return $this->__soapCall('GetUserNumberArray', array($parameters));
     }
 
     /**
@@ -549,7 +549,7 @@ class WSSMS extends \SoapClient
      */
     public function Logins2(Logins2 $parameters)
     {
-      return $this->__soapCall('Logins2', array($parameters));
+        return $this->__soapCall('Logins2', array($parameters));
     }
 
     /**
@@ -561,7 +561,7 @@ class WSSMS extends \SoapClient
      */
     public function Logins(Logins $parameters)
     {
-      return $this->__soapCall('Logins', array($parameters));
+        return $this->__soapCall('Logins', array($parameters));
     }
 
     /**
@@ -573,7 +573,7 @@ class WSSMS extends \SoapClient
      */
     public function GetState(GetState $parameters)
     {
-      return $this->__soapCall('GetState', array($parameters));
+        return $this->__soapCall('GetState', array($parameters));
     }
 
     /**
@@ -585,7 +585,7 @@ class WSSMS extends \SoapClient
      */
     public function GetCities(GetCities $parameters)
     {
-      return $this->__soapCall('GetCities', array($parameters));
+        return $this->__soapCall('GetCities', array($parameters));
     }
 
     /**
@@ -597,7 +597,7 @@ class WSSMS extends \SoapClient
      */
     public function GetAllSendSmsArray(GetAllSendSmsArray $parameters)
     {
-      return $this->__soapCall('GetAllSendSmsArray', array($parameters));
+        return $this->__soapCall('GetAllSendSmsArray', array($parameters));
     }
 
     /**
@@ -609,7 +609,7 @@ class WSSMS extends \SoapClient
      */
     public function GetVerAndroid(GetVerAndroid $parameters)
     {
-      return $this->__soapCall('GetVerAndroid', array($parameters));
+        return $this->__soapCall('GetVerAndroid', array($parameters));
     }
 
     /**
@@ -621,7 +621,6 @@ class WSSMS extends \SoapClient
      */
     public function sendsmsGuid(sendsmsGuid $parameters)
     {
-      return $this->__soapCall('sendsmsGuid', array($parameters));
+        return $this->__soapCall('sendsmsGuid', array($parameters));
     }
-
 }

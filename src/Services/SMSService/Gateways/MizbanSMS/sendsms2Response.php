@@ -15,7 +15,6 @@ class sendsms2Response
      */
     public function __construct($sendsms2Result)
     {
-      $this->sendsms2Result = $sendsms2Result;
+        $this->sendsms2Result = $sendsms2Result;
     }
-
 }

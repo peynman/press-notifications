@@ -8,7 +8,5 @@ class GetPreNum
      */
     public function __construct()
     {
-    
     }
-
 }

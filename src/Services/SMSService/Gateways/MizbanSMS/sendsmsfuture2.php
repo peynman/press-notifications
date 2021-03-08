@@ -85,17 +85,16 @@ class sendsmsfuture2
      */
     public function __construct($username, $password, $to, $text, $from, $api, $year, $month, $day, $hour, $min)
     {
-      $this->username = $username;
-      $this->password = $password;
-      $this->to = $to;
-      $this->text = $text;
-      $this->from = $from;
-      $this->api = $api;
-      $this->year = $year;
-      $this->month = $month;
-      $this->day = $day;
-      $this->hour = $hour;
-      $this->min = $min;
+        $this->username = $username;
+        $this->password = $password;
+        $this->to = $to;
+        $this->text = $text;
+        $this->from = $from;
+        $this->api = $api;
+        $this->year = $year;
+        $this->month = $month;
+        $this->day = $day;
+        $this->hour = $hour;
+        $this->min = $min;
     }
-
 }

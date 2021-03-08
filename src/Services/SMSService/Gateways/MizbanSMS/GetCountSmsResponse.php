@@ -15,7 +15,6 @@ class GetCountSmsResponse
      */
     public function __construct($GetCountSmsResult)
     {
-      $this->GetCountSmsResult = $GetCountSmsResult;
+        $this->GetCountSmsResult = $GetCountSmsResult;
     }
-
 }

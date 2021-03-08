@@ -32,7 +32,8 @@ class SMSMessageController extends BaseCRUDController
      *
      * @return Response
      */
-    public function sendBatchMessage(ISMSService $service, BatchSendSMSRequest $request) {
+    public function sendBatchMessage(ISMSService $service, BatchSendSMSRequest $request)
+    {
         return $service->queueSMSMessagesForRequest($request);
     }
 }

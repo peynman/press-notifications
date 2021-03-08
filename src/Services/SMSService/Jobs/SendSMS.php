@@ -12,7 +12,6 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Validation\ValidationException;
 use Larapress\CRUD\BaseFlags;
 use Larapress\CRUD\Events\CRUDUpdated;
 use Larapress\CRUD\Exceptions\AppException;
@@ -22,42 +21,42 @@ use Larapress\Notifications\Models\SMSGatewayData;
 class SendSMS implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-	/**
-	 * @var SMSMessage
-	 */
-	private $message;
+    /**
+     * @var SMSMessage
+     */
+    private $message;
 
-	/**
-	 * Create a new job instance.
-	 *
-	 * @param SMSMessage $message
-	 */
+    /**
+     * Create a new job instance.
+     *
+     * @param SMSMessage $message
+     */
     public function __construct(SMSMessage $message)
     {
-	    $this->message = $message;
-	    // $this->onQueue(config('larapress.crud.queue'));
+        $this->message = $message;
+        // $this->onQueue(config('larapress.crud.queue'));
     }
 
     public function tags()
     {
         return ['send-sms', 'message:'.$this->message->id];
     }
-	/**
-	 * Execute the job.
-	 *
-	 * @param ISMSService $service
-	 *
-	 * @return void
-	 */
+    /**
+     * Execute the job.
+     *
+     * @param ISMSService $service
+     *
+     * @return void
+     */
     public function handle(ISMSService $service)
     {
         $gatewayData = $this->message->sms_gateway;
-        if (is_null($gatewayData) || BaseFlags::isActive($gatewayData->flags ,SMSGatewayData::FLAGS_DISABLED)) {
+        if (is_null($gatewayData) || BaseFlags::isActive($gatewayData->flags, SMSGatewayData::FLAGS_DISABLED)) {
             throw new Exception("SMS Message does not have an active gateway");
         }
 
         $now = Carbon::now();
-	    try {
+        try {
             /** @var ISMSGateway */
             $gateway = $gatewayData->getGateway();
             $gateway->init();
@@ -71,20 +70,20 @@ class SendSMS implements ShouldQueue
             }
             $data['provider_event_id'] = $msg_id;
 
-	        $this->message->update([
-	        	'status' => SMSMessage::STATUS_SENT,
+            $this->message->update([
+                'status' => SMSMessage::STATUS_SENT,
                 'sent_at' => $now,
                 'data' => $data,
             ]);
 
             CRUDUpdated::dispatch($this->message->author, $this->message, SMSMessageCRUDProvider::class, $now);
-	    } catch (\Exception $e) {
-	    	$this->message->update([
-	    		'status' => SMSMessage::STATUS_FAILED_SEND,
+        } catch (\Exception $e) {
+            $this->message->update([
+                'status' => SMSMessage::STATUS_FAILED_SEND,
             ]);
             CRUDUpdated::dispatch($this->message->author, $this->message, SMSMessageCRUDProvider::class, $now);
             Log::critical('SMS Send Failed: '.$e->getMessage(), $e->getTrace());
             throw new AppException(AppException::ERR_REJECTED_RESULT);
-	    }
+        }
     }
 }

@@ -46,11 +46,13 @@ class BatchSendSMSRequest extends FormRequest
         ];
     }
 
-    public function getType() {
+    public function getType()
+    {
         return $this->request->get('type');
     }
 
-    public function getIds() {
+    public function getIds()
+    {
         $ids = $this->request->get('ids');
         if (is_string($ids)) {
             return explode(",", $ids);
@@ -63,31 +65,38 @@ class BatchSendSMSRequest extends FormRequest
         }
     }
 
-    public function getMessage() {
+    public function getMessage()
+    {
         return $this->request->get('sms_message');
     }
 
-    public function getGatewayID() {
+    public function getGatewayID()
+    {
         return $this->request->get('gateway');
     }
 
-    public function getRoleIds() {
+    public function getRoleIds()
+    {
         return array_keys($this->request->get('roles', []));
     }
 
-    public function getDomainIds() {
+    public function getDomainIds()
+    {
         return array_keys($this->request->get('domains', []));
     }
 
-    public function shouldFilterRoles() {
+    public function shouldFilterRoles()
+    {
         return count($this->getRoleIds()) > 0;
     }
 
-    public function shouldFilterDomains() {
+    public function shouldFilterDomains()
+    {
         return count($this->getDomainIds()) > 0;
     }
 
-    public function getRegisteredFrom() {
+    public function getRegisteredFrom()
+    {
         $time = $this->request->get('from', null);
         if (!is_null($time)) {
             $time = Carbon::createFromFormat(config('larapress.crud.datetime-format'), $time);
@@ -95,7 +104,8 @@ class BatchSendSMSRequest extends FormRequest
         return $time;
     }
 
-    public function getRegisteredTo() {
+    public function getRegisteredTo()
+    {
         $time = $this->request->get('to', null);
         if (!is_null($time)) {
             $time = Carbon::createFromFormat(config('larapress.crud.datetime-format'), $time);

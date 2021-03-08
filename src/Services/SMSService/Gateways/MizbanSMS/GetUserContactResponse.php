@@ -15,7 +15,6 @@ class GetUserContactResponse
      */
     public function __construct($GetUserContactResult)
     {
-      $this->GetUserContactResult = $GetUserContactResult;
+        $this->GetUserContactResult = $GetUserContactResult;
     }
-
 }

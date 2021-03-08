@@ -15,7 +15,6 @@ class GetPreNum5000Response
      */
     public function __construct($GetPreNum5000Result)
     {
-      $this->GetPreNum5000Result = $GetPreNum5000Result;
+        $this->GetPreNum5000Result = $GetPreNum5000Result;
     }
-
 }

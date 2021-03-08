@@ -6,7 +6,6 @@ use Illuminate\Broadcasting\BroadcastManager;
 use Illuminate\Support\ServiceProvider;
 use Larapress\ECommerce\Repositories\BankGatewayRepository;
 use Larapress\ECommerce\Repositories\IBankGatewayRepository;
-use Larapress\Notifications\Broadcaster\RabbitMQBroadcaster;
 use Larapress\Notifications\Repository\ISMSGatewayRepository;
 use Larapress\Notifications\Repository\SMSGatewayRepository;
 use Larapress\Notifications\Services\Notifications\INotificationService;

@@ -7,43 +7,35 @@ use Illuminate\Support\Facades\Auth;
 use Larapress\CRUD\Services\BaseCRUDProvider;
 use Larapress\CRUD\Services\ICRUDProvider;
 use Larapress\CRUD\Services\IPermissionsMetadata;
-use Larapress\Notifications\Models\SMSGatewayData;
 
 class SMSGatewayDataCRUDProvider implements ICRUDProvider, IPermissionsMetadata
 {
-	use BaseCRUDProvider;
+    use BaseCRUDProvider;
 
     public $name_in_config = 'larapress.notifications.routes.sms_gateways.name';
+    public $class_in_config = 'larapress.notifications.routes.sms_gateways.model';
     public $verbs = [
         self::VIEW,
         self::CREATE,
         self::EDIT,
         self::DELETE
     ];
-    public $model = SMSGatewayData::class;
-	public $createValidations = [
+    public $createValidations = [
         'name' => 'required|string|unique:sms_gateways,name',
         'flags' => 'nullable|numeric',
         'data.gateway' => 'required|string',
-	];
-	public $updateValidations = [
+    ];
+    public $updateValidations = [
         'name' => 'required|string|unique:sms_gateways,name',
         'flags' => 'nullable|numeric',
         'data.gateway' => 'required|string',
-	];
-	public $validSortColumns = ['id', 'title', 'gateway_id', 'status', 'created_at'];
-	public $validRelations = [];
-	public $validFilters = [];
-	public $defaultShowRelations = [];
-	public $excludeIfNull = [];
-	public $autoSyncRelations = [];
-	public $searchColumns = [
-		'equals:id',
-		'equals:gateway_id',
-		'title',
-	];
-	public $filterFields = [];
-	public $filterDefaults = [];
+    ];
+    public $validSortColumns = ['id', 'title', 'gateway_id', 'status', 'created_at'];
+    public $searchColumns = [
+        'equals:id',
+        'equals:gateway_id',
+        'title',
+    ];
 
     /**
      * Exclude current id in name unique request
@@ -51,7 +43,8 @@ class SMSGatewayDataCRUDProvider implements ICRUDProvider, IPermissionsMetadata
      * @param Request $request
      * @return void
      */
-    public function getUpdateRules(Request $request) {
+    public function getUpdateRules(Request $request)
+    {
         $this->updateValidations['name'] .= ',' . $request->route('id');
         return $this->updateValidations;
     }
@@ -62,10 +55,10 @@ class SMSGatewayDataCRUDProvider implements ICRUDProvider, IPermissionsMetadata
      * @param array $args
      * @return array
      */
-	public function onBeforeCreate( $args )
-	{
+    public function onBeforeCreate($args)
+    {
         $args['author_id'] = Auth::user()->id;
 
-		return $args;
-	}
+        return $args;
+    }
 }

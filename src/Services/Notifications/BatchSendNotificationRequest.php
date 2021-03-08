@@ -50,7 +50,8 @@ class BatchSendNotificationRequest extends FormRequest
         ];
     }
 
-    public function getIds() {
+    public function getIds()
+    {
         $ids = $this->request->get('ids', []);
         if (is_string($ids)) {
             return explode(",", $ids);
@@ -63,60 +64,73 @@ class BatchSendNotificationRequest extends FormRequest
         return $ids;
     }
 
-    public function getMessage() {
+    public function getMessage()
+    {
         return $this->request->get('message');
     }
 
-    public function getTitle() {
+    public function getTitle()
+    {
         return $this->request->get('title');
     }
 
-    public function getType() {
+    public function getType()
+    {
         return $this->request->get('type');
     }
 
-    public function getLink() {
+    public function getLink()
+    {
         $data = $this->get('data', []);
         return isset($data['link']) ? $data['link']: null;
     }
 
-    public function getColor() {
+    public function getColor()
+    {
         $data = $this->get('data', []);
         return isset($data['color']) ? $data['color']: null;
     }
 
-    public function isDismissable() {
+    public function isDismissable()
+    {
         $data = $this->get('data', []);
         return isset($data['dismissable']) ? $data['dismissable']: null;
     }
 
-    public function getIcon() {
+    public function getIcon()
+    {
         $data = $this->get('data', []);
         return isset($data['icon']) ? $data['icon']: null;
     }
 
-    public function getRoleIds() {
+    public function getRoleIds()
+    {
         return array_values(array_keys($this->request->get('roles', [])));
     }
 
-    public function getNotificationType() {
+    public function getNotificationType()
+    {
         $data = $this->get('data', []);
         return isset($data['type']) ? $data['type']: null;
     }
 
-    public function getDomainIds() {
+    public function getDomainIds()
+    {
         return array_keys($this->request->get('domains', []));
     }
 
-    public function shouldFilterRoles() {
+    public function shouldFilterRoles()
+    {
         return count($this->getRoleIds()) > 0;
     }
 
-    public function shouldFilterDomains() {
+    public function shouldFilterDomains()
+    {
         return count($this->getDomainIds()) > 0;
     }
 
-    public function getRegisteredFrom() {
+    public function getRegisteredFrom()
+    {
         $time = $this->request->get('from', null);
         if (!is_null($time)) {
             $time = Carbon::createFromFormat(config('larapress.crud.datetime-format'), $time);
@@ -124,7 +138,8 @@ class BatchSendNotificationRequest extends FormRequest
         return $time;
     }
 
-    public function getRegisteredTo() {
+    public function getRegisteredTo()
+    {
         $time = $this->request->get('to', null);
         if (!is_null($time)) {
             $time = Carbon::createFromFormat(config('larapress.crud.datetime-format'), $time);

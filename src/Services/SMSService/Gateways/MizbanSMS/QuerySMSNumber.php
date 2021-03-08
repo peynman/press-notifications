@@ -36,10 +36,9 @@ class QuerySMSNumber
      */
     public function __construct($Name, $number, $api, $enable)
     {
-      $this->Name = $Name;
-      $this->number = $number;
-      $this->api = $api;
-      $this->enable = $enable;
+        $this->Name = $Name;
+        $this->number = $number;
+        $this->api = $api;
+        $this->enable = $enable;
     }
-
 }

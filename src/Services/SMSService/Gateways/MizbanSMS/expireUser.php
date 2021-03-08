@@ -22,8 +22,7 @@ class expireUser
      */
     public function __construct($startdate, $enddate)
     {
-      $this->startdate = $startdate;
-      $this->enddate = $enddate;
+        $this->startdate = $startdate;
+        $this->enddate = $enddate;
     }
-
 }

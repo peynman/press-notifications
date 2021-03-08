@@ -15,7 +15,6 @@ class GetMessageStatuses21
      */
     public function __construct($id)
     {
-      $this->id = $id;
+        $this->id = $id;
     }
-
 }

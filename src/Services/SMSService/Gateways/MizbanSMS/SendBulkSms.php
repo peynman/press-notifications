@@ -106,20 +106,19 @@ class SendBulkSms
      */
     public function __construct($username, $password, $api, $from, $bankId, $body, $recordEnd, $gender, $receiverNumberKind, $ageStart, $ageEnd, $title, $receiverNumberPrefix, $recordStart)
     {
-      $this->username = $username;
-      $this->password = $password;
-      $this->api = $api;
-      $this->from = $from;
-      $this->bankId = $bankId;
-      $this->body = $body;
-      $this->recordEnd = $recordEnd;
-      $this->gender = $gender;
-      $this->receiverNumberKind = $receiverNumberKind;
-      $this->ageStart = $ageStart;
-      $this->ageEnd = $ageEnd;
-      $this->title = $title;
-      $this->receiverNumberPrefix = $receiverNumberPrefix;
-      $this->recordStart = $recordStart;
+        $this->username = $username;
+        $this->password = $password;
+        $this->api = $api;
+        $this->from = $from;
+        $this->bankId = $bankId;
+        $this->body = $body;
+        $this->recordEnd = $recordEnd;
+        $this->gender = $gender;
+        $this->receiverNumberKind = $receiverNumberKind;
+        $this->ageStart = $ageStart;
+        $this->ageEnd = $ageEnd;
+        $this->title = $title;
+        $this->receiverNumberPrefix = $receiverNumberPrefix;
+        $this->recordStart = $recordStart;
     }
-
 }

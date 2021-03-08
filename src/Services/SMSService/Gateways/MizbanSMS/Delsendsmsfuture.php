@@ -29,9 +29,8 @@ class Delsendsmsfuture
      */
     public function __construct($username, $password, $Guid)
     {
-      $this->username = $username;
-      $this->password = $password;
-      $this->Guid = $Guid;
+        $this->username = $username;
+        $this->password = $password;
+        $this->Guid = $Guid;
     }
-
 }

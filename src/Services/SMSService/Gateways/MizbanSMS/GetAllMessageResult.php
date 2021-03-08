@@ -15,7 +15,6 @@ class GetAllMessageResult
      */
     public function __construct($any)
     {
-      $this->any = $any;
+        $this->any = $any;
     }
-
 }

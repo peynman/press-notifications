@@ -5,7 +5,8 @@ namespace Larapress\Notifications\Services\Notifications;
 use Larapress\Profiles\IProfileUser;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
-interface INotificationService {
+interface INotificationService
+{
 
     /**
      * Undocumented function

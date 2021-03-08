@@ -15,7 +15,6 @@ class CreditesResponse
      */
     public function __construct($CreditesResult)
     {
-      $this->CreditesResult = $CreditesResult;
+        $this->CreditesResult = $CreditesResult;
     }
-
 }

@@ -28,45 +28,47 @@ use Larapress\CRUD\ICRUDUser;
  */
 class SMSMessage extends Model
 {
-	use SoftDeletes;
+    use SoftDeletes;
 
-	protected $table = 'sms_messages';
+    protected $table = 'sms_messages';
 
-	protected $fillable = [
-		'author_id',
-		'sms_gateway_id',
-		'to',
-		'from',
-		'message',
-		'status',
-		'flags',
-		'delivered_at',
+    protected $fillable = [
+        'author_id',
+        'sms_gateway_id',
+        'to',
+        'from',
+        'message',
+        'status',
+        'flags',
+        'delivered_at',
         'sent_at',
         'data'
-	];
+    ];
 
-	protected $dates = [
-		'delivered_at',
-		'send_at',
-		'sent_at',
+    protected $dates = [
+        'delivered_at',
+        'send_at',
+        'sent_at',
     ];
 
     protected $casts = [
         'data' => 'array'
     ];
 
-	/**
-	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-	 */
-	public function author() {
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function author()
+    {
         return $this->belongsTo(config('larapress.crud.user.class'), 'author_id');
-	}
+    }
 
-	/**
-	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-	 */
-	public function sms_gateway() {
-		return $this->belongsTo(SMSGatewayData::class, 'sms_gateway_id');
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function sms_gateway()
+    {
+        return $this->belongsTo(SMSGatewayData::class, 'sms_gateway_id');
     }
 
 

@@ -15,7 +15,6 @@ class GetCitiesResponse
      */
     public function __construct($GetCitiesResult)
     {
-      $this->GetCitiesResult = $GetCitiesResult;
+        $this->GetCitiesResult = $GetCitiesResult;
     }
-
 }

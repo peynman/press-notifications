@@ -15,7 +15,6 @@ class sendsmsSimCardResponse
      */
     public function __construct($sendsmsSimCardResult)
     {
-      $this->sendsmsSimCardResult = $sendsmsSimCardResult;
+        $this->sendsmsSimCardResult = $sendsmsSimCardResult;
     }
-
 }

@@ -8,7 +8,5 @@ class GetVerAndroid
      */
     public function __construct()
     {
-    
     }
-
 }

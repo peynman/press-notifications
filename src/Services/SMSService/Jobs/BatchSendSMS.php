@@ -3,7 +3,6 @@
 namespace Larapress\Notifications\Services\SMSService\Jobs;
 
 use Larapress\Notifications\Models\SMSMessage;
-use Larapress\Notifications\Services\SMSService\ISMSService;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Bus\Queueable;
@@ -12,7 +11,6 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Validation\ValidationException;
 use Larapress\CRUD\BaseFlags;
 use Larapress\CRUD\Events\CRUDUpdated;
 use Larapress\CRUD\Exceptions\AppException;

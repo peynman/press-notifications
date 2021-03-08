@@ -22,8 +22,7 @@ class Logins2
      */
     public function __construct($user, $pass)
     {
-      $this->user = $user;
-      $this->pass = $pass;
+        $this->user = $user;
+        $this->pass = $pass;
     }
-
 }

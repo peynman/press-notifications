@@ -15,7 +15,6 @@ class smscounterResponse
      */
     public function __construct($smscounterResult)
     {
-      $this->smscounterResult = $smscounterResult;
+        $this->smscounterResult = $smscounterResult;
     }
-
 }

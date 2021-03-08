@@ -22,8 +22,7 @@ class States
      */
     public function __construct($Name, $Value)
     {
-      $this->Name = $Name;
-      $this->Value = $Value;
+        $this->Name = $Name;
+        $this->Value = $Value;
     }
-
 }

@@ -15,7 +15,6 @@ class NazirSendResponse
      */
     public function __construct($NazirSendResult)
     {
-      $this->NazirSendResult = $NazirSendResult;
+        $this->NazirSendResult = $NazirSendResult;
     }
-
 }

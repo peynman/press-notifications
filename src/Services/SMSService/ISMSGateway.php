@@ -16,7 +16,7 @@ interface ISMSGateway
      * @param array $conf
      * @return void
      */
-	public function config(array $conf);
+    public function config(array $conf);
 
     /**
      * Undocumented function
@@ -26,12 +26,12 @@ interface ISMSGateway
      * @param array $options
      * @return void
      */
-	public function sendSMS(String $number, String $message, array $options);
+    public function sendSMS(String $number, String $message, array $options);
 
     /**
      * Undocumented function
      *
      * @return void
      */
-	public function init();
+    public function init();
 }

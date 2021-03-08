@@ -15,7 +15,6 @@ class GetVerAndroidResponse
      */
     public function __construct($GetVerAndroidResult)
     {
-      $this->GetVerAndroidResult = $GetVerAndroidResult;
+        $this->GetVerAndroidResult = $GetVerAndroidResult;
     }
-
 }

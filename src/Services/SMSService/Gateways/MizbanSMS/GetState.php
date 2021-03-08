@@ -8,7 +8,5 @@ class GetState
      */
     public function __construct()
     {
-    
     }
-
 }

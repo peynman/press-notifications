@@ -50,12 +50,11 @@ class sendsms
      */
     public function __construct($username, $password, $to, $text, $from, $api)
     {
-      $this->username = $username;
-      $this->password = $password;
-      $this->to = $to;
-      $this->text = $text;
-      $this->from = $from;
-      $this->api = $api;
+        $this->username = $username;
+        $this->password = $password;
+        $this->to = $to;
+        $this->text = $text;
+        $this->from = $from;
+        $this->api = $api;
     }
-
 }

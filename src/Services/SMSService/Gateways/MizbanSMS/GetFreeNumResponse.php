@@ -15,7 +15,6 @@ class GetFreeNumResponse
      */
     public function __construct($GetFreeNumResult)
     {
-      $this->GetFreeNumResult = $GetFreeNumResult;
+        $this->GetFreeNumResult = $GetFreeNumResult;
     }
-
 }

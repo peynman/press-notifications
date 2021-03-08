@@ -15,7 +15,6 @@ class GetUserExpResponse
      */
     public function __construct($GetUserExpResult)
     {
-      $this->GetUserExpResult = $GetUserExpResult;
+        $this->GetUserExpResult = $GetUserExpResult;
     }
-
 }

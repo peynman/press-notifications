@@ -15,7 +15,6 @@ class GetBankIdResponse
      */
     public function __construct($GetBankIdResult)
     {
-      $this->GetBankIdResult = $GetBankIdResult;
+        $this->GetBankIdResult = $GetBankIdResult;
     }
-
 }

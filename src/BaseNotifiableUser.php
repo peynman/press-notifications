@@ -4,12 +4,14 @@ namespace Larapress\Notifications;
 
 use Larapress\Notifications\Models\Notification;
 
-trait BaseNotifiableUser {
+trait BaseNotifiableUser
+{
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function user_notifications() {
+    public function user_notifications()
+    {
         return $this->hasMany(
             Notification::class,
             'user_id'
@@ -19,7 +21,8 @@ trait BaseNotifiableUser {
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function unseen_notifications() {
+    public function unseen_notifications()
+    {
         return $this->user_notifications()
                     ->whereNotIn('status', [Notification::STATUS_DISMISSED, Notification::STATUS_SEEN]);
     }

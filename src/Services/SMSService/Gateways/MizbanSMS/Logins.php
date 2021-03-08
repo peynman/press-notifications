@@ -15,7 +15,6 @@ class Logins
      */
     public function __construct($secuity)
     {
-      $this->secuity = $secuity;
+        $this->secuity = $secuity;
     }
-
 }

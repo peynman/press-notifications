@@ -15,7 +15,6 @@ class sendsmsGuidResponse
      */
     public function __construct($sendsmsGuidResult)
     {
-      $this->sendsmsGuidResult = $sendsmsGuidResult;
+        $this->sendsmsGuidResult = $sendsmsGuidResult;
     }
-
 }

@@ -15,7 +15,6 @@ class GetCities
      */
     public function __construct($parent)
     {
-      $this->parent = $parent;
+        $this->parent = $parent;
     }
-
 }

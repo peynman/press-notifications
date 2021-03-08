@@ -15,7 +15,6 @@ class GetAllMessageResponse
      */
     public function __construct($GetAllMessageResult)
     {
-      $this->GetAllMessageResult = $GetAllMessageResult;
+        $this->GetAllMessageResult = $GetAllMessageResult;
     }
-
 }

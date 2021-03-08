@@ -2,8 +2,8 @@
 
 namespace Larapress\Notifications\Repository;
 
-
-interface ISMSGatewayRepository {
+interface ISMSGatewayRepository
+{
 
     /**
      * @param IProfileUser|ICRUDUser $user

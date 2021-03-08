@@ -10,7 +10,8 @@ use Larapress\Profiles\IProfileUser;
 use Larapress\CRUD\Services\ICRUDProvider;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
-class NotificationService implements INotificationService {
+class NotificationService implements INotificationService
+{
 
 
 
@@ -20,7 +21,8 @@ class NotificationService implements INotificationService {
      * @param BatchSendNotificationRequest $request
      * @return StreamedResponse
      */
-    public function exportNotificationUsers(BatchSendNotificationRequest $request) {
+    public function exportNotificationUsers(BatchSendNotificationRequest $request)
+    {
         ini_set('memory_limit', '1G');
         ini_set('max_execution_time', 0);
         $query = $this->getUsersForBatchRequest($request);
@@ -31,7 +33,7 @@ class NotificationService implements INotificationService {
 
         return new StreamedResponse(function () use ($query, $provider) {
             $FH = fopen('php://output', 'w');
-            $query->chunk(100, function($users) use($FH, $provider) {
+            $query->chunk(100, function ($users) use ($FH, $provider) {
                 foreach ($users as $user) {
                     fputcsv($FH, $provider->getExportArray($user));
                 }
@@ -52,12 +54,13 @@ class NotificationService implements INotificationService {
      * @param BatchSendNotificationRequest $request
      * @return Notification[]
      */
-    public function queueBatchNotifications(BatchSendNotificationRequest $request) {
+    public function queueBatchNotifications(BatchSendNotificationRequest $request)
+    {
         $query = $this->getUsersForBatchRequest($request);
 
         $notifyCounter = 0;
         $author = Auth::user();
-        $query->chunk(100, function($users) use($author, $request, &$notifyCounter) {
+        $query->chunk(100, function ($users) use ($author, $request, &$notifyCounter) {
             foreach ($users as $user) {
                 $message = $this->getMessageForUser($request->getMessage(), $user);
                 $title = $this->getMessageForUser($request->getTitle(), $user);
@@ -90,7 +93,8 @@ class NotificationService implements INotificationService {
         ];
     }
 
-    protected function getUsersForBatchRequest(BatchSendNotificationRequest $request) {
+    protected function getUsersForBatchRequest(BatchSendNotificationRequest $request)
+    {
         $ids = $request->getIds();
         $class = config('larapress.crud.user.class');
         $query = call_user_func([$class, 'select'], 'id', 'name');
@@ -98,58 +102,58 @@ class NotificationService implements INotificationService {
         switch ($request->getType()) {
             case 'in_ids':
                 $query->whereIn('id', $ids);
-            break;
+                break;
             case 'all_except_ids':
                 $query->whereNotIn('id', $ids);
-            break;
+                break;
             case 'in_purchased_ids':
-                $query->whereHas('carts', function($q) use($ids) {
+                $query->whereHas('carts', function ($q) use ($ids) {
                     $q->whereIn('status', [Cart::STATUS_ACCESS_COMPLETE, Cart::STATUS_ACCESS_GRANTED]);
-                    $q->whereHas('products', function($q) use($ids) {
+                    $q->whereHas('products', function ($q) use ($ids) {
                         $q->whereIn('id', $ids);
                     });
                 });
-            break;
+                break;
             case 'not_in_purchased_ids':
-                $query->whereDoesntHave('carts', function($q) use($ids) {
+                $query->whereDoesntHave('carts', function ($q) use ($ids) {
                     $q->whereIn('status', [Cart::STATUS_ACCESS_COMPLETE, Cart::STATUS_ACCESS_GRANTED]);
-                    $q->whereHas('products', function($q) use($ids) {
+                    $q->whereHas('products', function ($q) use ($ids) {
                         $q->whereIn('id', $ids);
                     });
                 });
-            break;
+                break;
             case 'in_form_entries':
-                $query->whereHas('form_entries', function($q) use($ids) {
+                $query->whereHas('form_entries', function ($q) use ($ids) {
                     $q->whereIn('form_id', $ids);
                 });
-            break;
+                break;
             case 'not_in_form_entries':
-                $query->whereDoesntHave('form_entries', function($q) use($ids) {
+                $query->whereDoesntHave('form_entries', function ($q) use ($ids) {
                     $q->whereIn('form_id', $ids);
                 });
-            break;
+                break;
             case 'in_form_entry_tags':
-                $query->whereHas('form_entries', function($q) use($ids) {
+                $query->whereHas('form_entries', function ($q) use ($ids) {
                     $q->whereIn('tags', $ids);
                 });
-            break;
+                break;
             case 'not_in_form_enty_tags':
-                $query->whereDoesntHave('form_entries', function($q) use($ids) {
+                $query->whereDoesntHave('form_entries', function ($q) use ($ids) {
                     $q->whereIn('tags', $ids);
                 });
-            break;
+                break;
         }
 
         $provider = new UserCRUDProvider();
         $query = $provider->onBeforeQuery($query);
 
         if ($request->shouldFilterDomains()) {
-            $query->whereHas('domains', function($q) use($request) {
+            $query->whereHas('domains', function ($q) use ($request) {
                 $q->whereIn('id', $request->getDomainIds());
             });
         }
         if ($request->shouldFilterRoles()) {
-            $query->whereHas('roles', function($q) use($request) {
+            $query->whereHas('roles', function ($q) use ($request) {
                 $q->whereIn('id', $request->getRoleIds());
             });
         }
@@ -158,9 +162,9 @@ class NotificationService implements INotificationService {
 
         if (!is_null($from) && !is_null($to)) {
             $query->whereBetween('created_at', [$from, $to]);
-        } else if (!is_null($from)) {
+        } elseif (!is_null($from)) {
             $query->where('created_at', '>=', $from);
-        } else if (!is_null($to)) {
+        } elseif (!is_null($to)) {
             $query->where('created_at', '<=', $to);
         }
 
@@ -174,7 +178,8 @@ class NotificationService implements INotificationService {
      * @param int $notification_id
      * @return array
      */
-    public function dismissNotificationForUser(IProfileUser $user, $notification_id) {
+    public function dismissNotificationForUser(IProfileUser $user, $notification_id)
+    {
         $notification = Notification::where('user_id', $user->id)->where('id', $notification_id)->first();
         if (!is_null($notification)) {
             $notification->update([
@@ -195,7 +200,8 @@ class NotificationService implements INotificationService {
      * @param int $notification_id
      * @return string
      */
-    public function viewNotificationForUser(IProfileUser $user, $notification_id) {
+    public function viewNotificationForUser(IProfileUser $user, $notification_id)
+    {
         $notification = Notification::where('user_id', $user->id)->where('id', $notification_id)->first();
         if (!is_null($notification)) {
             $notification->update([
@@ -213,7 +219,8 @@ class NotificationService implements INotificationService {
      * @param IProfileUser $user
      * @return string
      */
-    public function getMessageForUser($message, $user) {
+    public function getMessageForUser($message, $user)
+    {
         $firstname = isset($user->profile['data']['values']['firstname']) ? $user->profile['data']['values']['firstname'] : $user->name;
         $lastname = isset($user->profile['data']['values']['lastname']) ? $user->profile['data']['values']['lastname'] : '';
         $fullname = $firstname.' '.$lastname;
@@ -230,7 +237,8 @@ class NotificationService implements INotificationService {
      * @param IProfileUser $user
      * @return void
      */
-    public function getLinkForUser($link, $user) {
+    public function getLinkForUser($link, $user)
+    {
         $link = str_replace('$id', $user->id, $link);
         return $link;
     }

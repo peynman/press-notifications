@@ -1,13 +1,13 @@
 {
   "name": "peynman/larapress-notifications",
-  "description": "This is the description of the package.",
+  "description": "Notifications, SMS and E-Mail for Larapress.",
   "type": "library",
   "license": "MIT",
   "minimum-stability": "dev",
   "authors": [
     {
       "name": "Peyman Abdi",
-      "email": "peyman.abdi.work@gmail.com"
+      "email": "larapress@peynman.ir"
     }
   ],
   "autoload": {

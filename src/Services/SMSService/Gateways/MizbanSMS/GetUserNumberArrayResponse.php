@@ -15,7 +15,6 @@ class GetUserNumberArrayResponse
      */
     public function __construct($GetUserNumberArrayResult)
     {
-      $this->GetUserNumberArrayResult = $GetUserNumberArrayResult;
+        $this->GetUserNumberArrayResult = $GetUserNumberArrayResult;
     }
-
 }

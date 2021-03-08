@@ -15,7 +15,6 @@ class Logins2Response
      */
     public function __construct($Logins2Result)
     {
-      $this->Logins2Result = $Logins2Result;
+        $this->Logins2Result = $Logins2Result;
     }
-
 }

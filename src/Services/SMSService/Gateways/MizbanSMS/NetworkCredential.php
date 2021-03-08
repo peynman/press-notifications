@@ -36,10 +36,9 @@ class NetworkCredential
      */
     public function __construct($UserName, $Password, $SecurePassword, $Domain)
     {
-      $this->UserName = $UserName;
-      $this->Password = $Password;
-      $this->SecurePassword = $SecurePassword;
-      $this->Domain = $Domain;
+        $this->UserName = $UserName;
+        $this->Password = $Password;
+        $this->SecurePassword = $SecurePassword;
+        $this->Domain = $Domain;
     }
-
 }

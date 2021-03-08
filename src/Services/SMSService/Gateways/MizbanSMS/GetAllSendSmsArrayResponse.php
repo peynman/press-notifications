@@ -15,7 +15,6 @@ class GetAllSendSmsArrayResponse
      */
     public function __construct($GetAllSendSmsArrayResult)
     {
-      $this->GetAllSendSmsArrayResult = $GetAllSendSmsArrayResult;
+        $this->GetAllSendSmsArrayResult = $GetAllSendSmsArrayResult;
     }
-
 }

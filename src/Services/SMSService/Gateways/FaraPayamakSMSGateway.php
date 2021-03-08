@@ -11,9 +11,9 @@ use SoapClient;
  */
 class FaraPayamakSMSGateway implements ISMSGateway
 {
-	protected $config = [];
-	/** @var Client */
-	protected $client = null;
+    protected $config = [];
+    /** @var Client */
+    protected $client = null;
 
     /**
      * Undocumented function
@@ -21,35 +21,35 @@ class FaraPayamakSMSGateway implements ISMSGateway
      * @param array $conf
      * @return void
      */
-	public function config( array $conf )
-	{
+    public function config(array $conf)
+    {
         if (!isset($conf['soap_url']) || !isset($conf['username']) || !isset($conf['password']) || !isset($conf['phone_number'])) {
             throw new Exception("Farapayamak invalid config");
         }
 
         $this->config = $conf;
-	}
+    }
 
     /**
      * Undocumented function
      *
      * @return void
      */
-	public function init()
-	{
+    public function init()
+    {
         ini_set("soap.wsdl_cache_enabled", "0");
         $this->client = new SoapClient($this->config['soap_url']);
-	}
+    }
 
-	/**
-	 * @param String $number
-	 * @param String $message
-	 * @param array $options
-	 *
-	 * @return null|string
-	 */
-	function sendSMS( String $number, String $message, array $options )
-	{
+    /**
+     * @param String $number
+     * @param String $message
+     * @param array $options
+     *
+     * @return null|string
+     */
+    public function sendSMS(String $number, String $message, array $options)
+    {
         $data = [
             'username' => $this->config['username'],
             'password' => $this->config['password'],
@@ -60,6 +60,5 @@ class FaraPayamakSMSGateway implements ISMSGateway
         ];
         $result = $this->client->SendSimpleSMS2($data);
         return $result;
-	}
-
+    }
 }

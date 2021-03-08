@@ -29,9 +29,8 @@ class QueryNum
      */
     public function __construct($open, $kind, $status)
     {
-      $this->open = $open;
-      $this->kind = $kind;
-      $this->status = $status;
+        $this->open = $open;
+        $this->kind = $kind;
+        $this->status = $status;
     }
-
 }

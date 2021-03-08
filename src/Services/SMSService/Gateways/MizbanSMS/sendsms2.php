@@ -43,11 +43,10 @@ class sendsms2
      */
     public function __construct($username, $password, $to, $text, $from)
     {
-      $this->username = $username;
-      $this->password = $password;
-      $this->to = $to;
-      $this->text = $text;
-      $this->from = $from;
+        $this->username = $username;
+        $this->password = $password;
+        $this->to = $to;
+        $this->text = $text;
+        $this->from = $from;
     }
-
 }

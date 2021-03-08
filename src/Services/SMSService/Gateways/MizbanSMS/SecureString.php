@@ -8,7 +8,5 @@ class SecureString
      */
     public function __construct()
     {
-    
     }
-
 }

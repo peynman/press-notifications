@@ -50,12 +50,11 @@ class GetCountSms
      */
     public function __construct($bankId, $gender, $receiverNumberKind, $ageStart, $ageEnd, $receiverNumberPrefix)
     {
-      $this->bankId = $bankId;
-      $this->gender = $gender;
-      $this->receiverNumberKind = $receiverNumberKind;
-      $this->ageStart = $ageStart;
-      $this->ageEnd = $ageEnd;
-      $this->receiverNumberPrefix = $receiverNumberPrefix;
+        $this->bankId = $bankId;
+        $this->gender = $gender;
+        $this->receiverNumberKind = $receiverNumberKind;
+        $this->ageStart = $ageStart;
+        $this->ageEnd = $ageEnd;
+        $this->receiverNumberPrefix = $receiverNumberPrefix;
     }
-
 }

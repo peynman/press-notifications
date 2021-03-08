@@ -15,7 +15,6 @@ class smscounter
      */
     public function __construct($text)
     {
-      $this->text = $text;
+        $this->text = $text;
     }
-
 }

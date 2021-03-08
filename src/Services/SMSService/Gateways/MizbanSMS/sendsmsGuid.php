@@ -57,13 +57,12 @@ class sendsmsGuid
      */
     public function __construct($username, $password, $to, $text, $from, $api, $Guid)
     {
-      $this->username = $username;
-      $this->password = $password;
-      $this->to = $to;
-      $this->text = $text;
-      $this->from = $from;
-      $this->api = $api;
-      $this->Guid = $Guid;
+        $this->username = $username;
+        $this->password = $password;
+        $this->to = $to;
+        $this->text = $text;
+        $this->from = $from;
+        $this->api = $api;
+        $this->Guid = $Guid;
     }
-
 }

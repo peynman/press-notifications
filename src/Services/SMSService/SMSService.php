@@ -5,7 +5,6 @@ namespace Larapress\Notifications\Services\SMSService;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Larapress\CRUD\BaseFlags;
 use Larapress\ECommerce\Models\Cart;
 use Larapress\Notifications\Models\SMSGatewayData;
@@ -13,7 +12,6 @@ use Larapress\Notifications\Models\SMSMessage;
 use Larapress\Notifications\Services\SMSService\Jobs\BatchSendSMS;
 use Larapress\Profiles\Models\Domain;
 use Larapress\Profiles\Models\PhoneNumber;
-use Larapress\Reports\Services\ITaskReportService;
 use Larapress\Profiles\IProfileUser;
 use Larapress\CRUD\ICRUDUser;
 use Larapress\Profiles\CRUD\PhoneNumberCRUDProvider;
@@ -71,48 +69,48 @@ class SMSService implements ISMSService
         switch ($request->getType()) {
             case 'in_ids':
                 $query->whereIn('user_id', $ids);
-            break;
+                break;
             case 'all_except_ids':
                 $query->whereNotIn('user_id', $ids);
-            break;
+                break;
             case 'in_purchased_ids':
-                $query->whereHas('user', function($q) use($ids) {
-                    $q->whereHas('carts', function($q) use($ids) {
+                $query->whereHas('user', function ($q) use ($ids) {
+                    $q->whereHas('carts', function ($q) use ($ids) {
                         $q->whereIn('status', [Cart::STATUS_ACCESS_COMPLETE, Cart::STATUS_ACCESS_GRANTED]);
-                        $q->whereHas('products', function($q) use($ids) {
+                        $q->whereHas('products', function ($q) use ($ids) {
                             $q->whereIn('id', $ids);
                         });
                     });
                 });
-            break;
+                break;
             case 'not_in_purchased_ids':
-                $query->whereDoesntHave('customer.carts', function($q) use($ids) {
+                $query->whereDoesntHave('customer.carts', function ($q) use ($ids) {
                     $q->whereIn('status', [Cart::STATUS_ACCESS_COMPLETE, Cart::STATUS_ACCESS_GRANTED]);
-                    $q->whereHas('products', function($q) use($ids) {
+                    $q->whereHas('products', function ($q) use ($ids) {
                         $q->whereIn('id', $ids);
                     });
                 });
-            break;
+                break;
             case 'in_form_entries':
-                $query->whereHas('customer.form_entries', function($q) use($ids) {
+                $query->whereHas('customer.form_entries', function ($q) use ($ids) {
                     $q->whereIn('form_id', $ids);
                 });
-            break;
+                break;
             case 'not_in_form_entries':
-                $query->whereDoesntHave('user.form_entries', function($q) use($ids) {
+                $query->whereDoesntHave('user.form_entries', function ($q) use ($ids) {
                     $q->whereIn('form_id', $ids);
                 });
-            break;
+                break;
             case 'in_form_entry_tags':
-                $query->whereHas('user.form_entries', function($q) use($ids) {
+                $query->whereHas('user.form_entries', function ($q) use ($ids) {
                     $q->whereIn('tags', $ids);
                 });
-            break;
+                break;
             case 'not_in_form_enty_tags':
-                $query->whereDoesntHave('user.form_entries', function($q) use($ids) {
+                $query->whereDoesntHave('user.form_entries', function ($q) use ($ids) {
                     $q->whereIn('tags', $ids);
                 });
-            break;
+                break;
         }
 
         /** @var IProfileUser|ICRUDUSer */
@@ -125,7 +123,7 @@ class SMSService implements ISMSService
             $query->whereIn('domain_id', $request->getDomainIds());
         }
         if ($request->shouldFilterRoles()) {
-            $query->whereHas('user.roles', function($q) use($request) {
+            $query->whereHas('user.roles', function ($q) use ($request) {
                 $q->whereIn('id', $request->getRoleIds());
             });
         }
@@ -134,14 +132,14 @@ class SMSService implements ISMSService
 
         if (!is_null($from) && !is_null($to)) {
             $query->whereBetween('created_at', [$from, $to]);
-        } else if (!is_null($from)) {
+        } elseif (!is_null($from)) {
             $query->where('created_at', '>=', $from);
-        } else if (!is_null($to)) {
+        } elseif (!is_null($to)) {
             $query->where('created_at', '<=', $to);
         }
 
         $msgCounter = 0;
-        $query->chunk(100, function($numbers) use(&$msgCounter, $user, $request) {
+        $query->chunk(100, function ($numbers) use (&$msgCounter, $user, $request) {
             $msgIds = [];
             foreach ($numbers as $number) {
                 if (!BaseFlags::isActive($number->flags, PhoneNumber::FLAGS_DO_NOT_CONTACT)) {
@@ -179,7 +177,8 @@ class SMSService implements ISMSService
      * @param IProfileUser $user
      * @return string
      */
-    public function getMessageForUser($message, $user) {
+    public function getMessageForUser($message, $user)
+    {
         $firstname = isset($user->profile['data']['values']['firstname']) ? $user->profile['data']['values']['firstname'] : $user->name;
         $lastname = isset($user->profile['data']['values']['lastname']) ? $user->profile['data']['values']['lastname'] : '';
         $fullname = $firstname.' '.$lastname;

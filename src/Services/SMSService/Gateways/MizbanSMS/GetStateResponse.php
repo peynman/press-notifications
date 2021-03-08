@@ -15,7 +15,6 @@ class GetStateResponse
      */
     public function __construct($GetStateResult)
     {
-      $this->GetStateResult = $GetStateResult;
+        $this->GetStateResult = $GetStateResult;
     }
-
 }

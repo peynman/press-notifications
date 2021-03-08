@@ -1,66 +1,63 @@
 <?php
 
-
 namespace Larapress\Notifications\CRUD;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Larapress\CRUD\Services\BaseCRUDProvider;
 use Larapress\CRUD\Services\ICRUDProvider;
 use Larapress\CRUD\Services\IPermissionsMetadata;
-use Larapress\Notifications\Models\Notification;
 
 class NotificationCRUDProvider implements ICRUDProvider, IPermissionsMetadata
 {
-	use BaseCRUDProvider;
+    use BaseCRUDProvider;
 
     public $name_in_config = 'larapress.notifications.routes.notifications.name';
+    public $class_in_config = 'larapress.notifications.routes.notifications.model';
     public $verbs = [
         self::VIEW,
         'send',
     ];
-    public $model = Notification::class;
-	public $validSortColumns = [
+    public $validSortColumns = [
         'id',
         'status',
         'created_at',
         'author_id',
         'status'
     ];
-	public $validRelations = [
+    public $validRelations = [
         'author',
         'user',
     ];
-	public $filterFields = [
+    public $filterFields = [
         'author_id' => 'equals:author_id',
         'user_id' => 'equals:user_id',
         'status' => 'equals:status',
     ];
-	public $searchColumns = [
+    public $searchColumns = [
         'equals:id',
         'message',
         'title',
-	];
-	public $defaultShowRelations = [
+    ];
+    public $defaultShowRelations = [
         'author',
         'user',
     ];
 
-	/**
-	 * @param SMSMessage $object
-	 *
-	 * @return bool
-	 */
-	public function onBeforeAccess( $object )
-	{
-		/** @var User $user */
-		$user = Auth::user();
-		if (!$user->hasRole('super-role')) {
-			return $object->author_id === $user->id;
-		}
+    /**
+     * @param SMSMessage $object
+     *
+     * @return bool
+     */
+    public function onBeforeAccess($object)
+    {
+        /** @var User $user */
+        $user = Auth::user();
+        if (! $user->hasRole('super-role')) {
+            return $object->author_id === $user->id;
+        }
 
-		return true;
-	}
+        return true;
+    }
 
     /**
      * Undocumented function
@@ -68,14 +65,14 @@ class NotificationCRUDProvider implements ICRUDProvider, IPermissionsMetadata
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @return Illuminate\Database\Eloquent\Builder
      */
-	public function onBeforeQuery( $query )
-	{
+    public function onBeforeQuery($query)
+    {
         /** @var IProfileUser|ICRUDUser $user */
         $user = Auth::user();
         if (! $user->hasRole(config('larapress.profiles.security.roles.super-role'))) {
-            $query->orWhere('author_id', $user->id);
+            $query->where('author_id', $user->id);
         }
 
-		return $query;
-	}
+        return $query;
+    }
 }

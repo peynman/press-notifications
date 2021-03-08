@@ -2,7 +2,6 @@
 
 namespace Larapress\Notifications\Repository;
 
-use Larapress\CRUD\Extend\Helpers;
 use Larapress\Notifications\Models\SMSGatewayData;
 
 class SMSGatewayRepository implements ISMSGatewayRepository
@@ -112,8 +111,7 @@ class SMSGatewayRepository implements ISMSGatewayRepository
      */
     public function getSMSGateways($user)
     {
-        if (
-            $user->hasRole(config('larapress.profiles.security.roles.super-role')) ||
+        if ($user->hasRole(config('larapress.profiles.security.roles.super-role')) ||
             $user->hasRole(config('larapress.profiles.security.roles.affiliate'))
         ) {
             return SMSGatewayData::select(['id', 'name'])->get();

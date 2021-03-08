@@ -43,11 +43,10 @@ class SendMsgUser
      */
     public function __construct($mobile, $txt, $from, $date, $status)
     {
-      $this->mobile = $mobile;
-      $this->txt = $txt;
-      $this->from = $from;
-      $this->date = $date;
-      $this->status = $status;
+        $this->mobile = $mobile;
+        $this->txt = $txt;
+        $this->from = $from;
+        $this->date = $date;
+        $this->status = $status;
     }
-
 }

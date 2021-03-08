@@ -15,7 +15,6 @@ class GetMessageStatuses50004Response
      */
     public function __construct($GetMessageStatuses50004Result)
     {
-      $this->GetMessageStatuses50004Result = $GetMessageStatuses50004Result;
+        $this->GetMessageStatuses50004Result = $GetMessageStatuses50004Result;
     }
-
 }

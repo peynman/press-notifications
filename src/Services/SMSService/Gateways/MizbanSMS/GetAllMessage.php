@@ -29,9 +29,8 @@ class GetAllMessage
      */
     public function __construct($username, $password, $countMsg)
     {
-      $this->username = $username;
-      $this->password = $password;
-      $this->countMsg = $countMsg;
+        $this->username = $username;
+        $this->password = $password;
+        $this->countMsg = $countMsg;
     }
-
 }

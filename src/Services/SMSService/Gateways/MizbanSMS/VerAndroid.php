@@ -22,8 +22,7 @@ class VerAndroid
      */
     public function __construct($value, $text)
     {
-      $this->value = $value;
-      $this->text = $text;
+        $this->value = $value;
+        $this->text = $text;
     }
-
 }

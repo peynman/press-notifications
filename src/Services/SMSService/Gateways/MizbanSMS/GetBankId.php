@@ -15,7 +15,6 @@ class GetBankId
      */
     public function __construct($bankId)
     {
-      $this->bankId = $bankId;
+        $this->bankId = $bankId;
     }
-
 }

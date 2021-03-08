@@ -15,7 +15,6 @@ class SeUser
      */
     public function __construct($Number)
     {
-      $this->Number = $Number;
+        $this->Number = $Number;
     }
-
 }

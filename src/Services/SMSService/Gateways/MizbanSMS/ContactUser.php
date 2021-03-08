@@ -22,8 +22,7 @@ class ContactUser
      */
     public function __construct($Contactname, $ContactTels)
     {
-      $this->Contactname = $Contactname;
-      $this->ContactTels = $ContactTels;
+        $this->Contactname = $Contactname;
+        $this->ContactTels = $ContactTels;
     }
-
 }

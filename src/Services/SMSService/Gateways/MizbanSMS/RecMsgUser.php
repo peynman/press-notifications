@@ -36,10 +36,9 @@ class RecMsgUser
      */
     public function __construct($mobile, $txt, $from, $date)
     {
-      $this->mobile = $mobile;
-      $this->txt = $txt;
-      $this->from = $from;
-      $this->date = $date;
+        $this->mobile = $mobile;
+        $this->txt = $txt;
+        $this->from = $from;
+        $this->date = $date;
     }
-
 }

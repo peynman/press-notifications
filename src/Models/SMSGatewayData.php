@@ -6,10 +6,7 @@ namespace Larapress\Notifications\Models;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Log;
-use Larapress\CRUD\Exceptions\AppException;
 use Larapress\CRUD\ICRUDUser;
-use Larapress\Notifications\Services\SMSService\Gatewayes\NexmoSMSGateway;
 
 /**
  * @property int            $id
@@ -26,24 +23,25 @@ class SMSGatewayData extends Model
 {
     use SoftDeletes;
 
-	protected $table = 'sms_gateways';
+    protected $table = 'sms_gateways';
 
-	protected $fillable = [
-		'author_id',
-		'name',
-		'data',
-		'flags',
-	];
+    protected $fillable = [
+        'author_id',
+        'name',
+        'data',
+        'flags',
+    ];
 
-	protected $casts = [
-		'data' => 'array',
+    protected $casts = [
+        'data' => 'array',
     ];
 
 
-	/**
-	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-	 */
-	public function author() {
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function author()
+    {
         return $this->belongsTo(config('larapress.crud.user.class'), 'author_id');
     }
 
@@ -53,7 +51,8 @@ class SMSGatewayData extends Model
      *
      * @return ISMSGateway
      */
-    public function getGateway() {
+    public function getGateway()
+    {
         if (!isset($this->data['gateway'])) {
             throw new Exception("SMS Gateway not defined");
         }
