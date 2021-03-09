@@ -25,15 +25,18 @@ class CreateUserNotificationsTable extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->index([
-                'deleted_at',
-                'created_at',
-                'updated_at',
-                'author_id',
-                'user_id',
-                'status',
-                'flags'
-            ]);
+            $table->index(
+                [
+                    'deleted_at',
+                    'created_at',
+                    'updated_at',
+                    'author_id',
+                    'user_id',
+                    'status',
+                    'flags'
+                ],
+                'notifications_full_index'
+            );
 
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('author_id')->references('id')->on('users');

@@ -28,17 +28,20 @@ class CreateSmsMessagesTable extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->index([
-                'deleted_at',
-                'created_at',
-                'updated_at',
-                'sms_gateway_id',
-                'author_id',
-                'status',
-                'from',
-                'to',
-                'flags'
-            ]);
+            $table->index(
+                [
+                    'deleted_at',
+                    'created_at',
+                    'updated_at',
+                    'sms_gateway_id',
+                    'author_id',
+                    'status',
+                    'from',
+                    'to',
+                    'flags'
+                ],
+                'sms_messages_full_index'
+            );
 
             $table->foreign('sms_gateway_id')->references('id')->on('sms_gateways');
             $table->foreign('author_id')->references('id')->on('users');

@@ -27,9 +27,11 @@ class CreateSmsGatewaysTable extends Migration
 
             $table->foreign('author_id')->references('id')->on('users');
         });
-        Schema::create('sms_gateways_domains', function (Blueprint $table) {
+        Schema::create('sms_gateway_domain', function (Blueprint $table) {
 	        $table->bigInteger('domain_id', false, true);
             $table->bigInteger('sms_gateway_id', false, true);
+
+            $table->index(['domain_id', 'sms_gateway_id']);
 
             $table->foreign('domain_id')->references('id')->on('domains');
             $table->foreign('sms_gateway_id')->references('id')->on('sms_gateways');
@@ -43,7 +45,7 @@ class CreateSmsGatewaysTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sms_gateways_domains');
+        Schema::dropIfExists('sms_gateway_domain');
         Schema::dropIfExists('sms_gateways');
     }
 }
