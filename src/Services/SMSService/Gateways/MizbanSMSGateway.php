@@ -62,8 +62,6 @@ class MizbanSMSGateway implements ISMSGateway
             "api" => $this->config['api'],
         ], null, []);
 
-        Log::debug(json_encode($result));
-
         return $result;
     }
 }

@@ -4,9 +4,12 @@
 namespace Larapress\Notifications\Models;
 
 use Exception;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Larapress\CRUD\ICRUDUser;
+use Larapress\Notifications\Factories\SMSGatewayDataFactory;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * @property int            $id
@@ -21,6 +24,7 @@ use Larapress\CRUD\ICRUDUser;
  */
 class SMSGatewayData extends Model
 {
+    use HasFactory;
     use SoftDeletes;
 
     protected $table = 'sms_gateways';
@@ -36,6 +40,16 @@ class SMSGatewayData extends Model
         'data' => 'array',
     ];
 
+
+    /**
+     * Undocumented function
+     *
+     * @return Factory
+     */
+    protected static function newFactory()
+    {
+        return SMSGatewayDataFactory::new();
+    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

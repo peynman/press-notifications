@@ -10,6 +10,7 @@ return [
             'smsir_fast' => \Larapress\Notifications\Services\SMSService\Gateways\SMSIRFastGateway::class,
             'smsir_simple' => \Larapress\Notifications\Services\SMSService\Gateways\SMSIRSimpleGateway::class,
             'mizbansms' => \Larapress\Notifications\Services\SMSService\Gateways\MizbanSMSGateway::class,
+            'mockery' => Larapress\Notifications\Services\SMSService\Gateways\MockerySMSGateway::class,
         ],
     ],
 

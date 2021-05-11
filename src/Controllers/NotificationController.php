@@ -2,13 +2,19 @@
 
 namespace Larapress\Notifications\Controllers;
 
-use Larapress\CRUD\CRUDControllers\BaseCRUDController;
+use Larapress\CRUD\Services\CRUD\BaseCRUDController;
 use Larapress\Notifications\CRUD\NotificationCRUDProvider;
 use Larapress\Notifications\Services\Notifications\BatchSendNotificationRequest;
 use Larapress\Notifications\Services\Notifications\INotificationService;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Larapress\Profiles\IProfileUser;
 
+/**
+ * Standard CRUD Controller for Notification resource.
+ *
+ * @group Notifications Management
+ */
 class NotificationController extends BaseCRUDController
 {
     public static function registerRoutes()
@@ -45,7 +51,7 @@ class NotificationController extends BaseCRUDController
 
 
     /**
-     * Undocumented function
+     * Export Users List
      *
      * @param INotificationService $service
      * @param BatchSendNotificationRequest $request
@@ -57,7 +63,7 @@ class NotificationController extends BaseCRUDController
     }
 
     /**
-     * Undocumented function
+     * Send Batch
      *
      * @param INotificationService $service
      * @param BatchSendNotificationRequest $request
@@ -69,7 +75,7 @@ class NotificationController extends BaseCRUDController
     }
 
     /**
-     * Undocumented function
+     * Dismiss Notification
      *
      * @param INotificationService $service
      * @param BatchSendNotificationRequest $request
@@ -81,7 +87,7 @@ class NotificationController extends BaseCRUDController
     }
 
     /**
-     * Undocumented function
+     * View Notification
      *
      * @param INotificationService $service
      * @param BatchSendNotificationRequest $request

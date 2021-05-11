@@ -7,7 +7,7 @@ use Larapress\ECommerce\Models\Cart;
 use Larapress\Notifications\Models\Notification;
 use Larapress\Profiles\CRUD\UserCRUDProvider;
 use Larapress\Profiles\IProfileUser;
-use Larapress\CRUD\Services\ICRUDProvider;
+use Larapress\CRUD\Services\CRUD\ICRUDProvider;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class NotificationService implements INotificationService

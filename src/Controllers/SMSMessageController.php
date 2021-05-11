@@ -2,12 +2,17 @@
 
 namespace Larapress\Notifications\Controllers;
 
-use Larapress\CRUD\CRUDControllers\BaseCRUDController;
+use Larapress\CRUD\Services\CRUD\BaseCRUDController;
 use Larapress\Notifications\CRUD\SMSMessageCRUDProvider;
 use Larapress\Notifications\Services\SMSService\BatchSendSMSRequest;
 use Larapress\Notifications\Services\SMSService\ISMSService;
 use Illuminate\Http\Response;
 
+/**
+ * Standard CRUD Controller for SMS Message resource.
+ *
+ * @group SMS Messages Management
+ */
 class SMSMessageController extends BaseCRUDController
 {
     public static function registerRoutes()
@@ -28,7 +33,7 @@ class SMSMessageController extends BaseCRUDController
 
 
     /**
-     * Undocumented function
+     * Batch Send
      *
      * @return Response
      */
