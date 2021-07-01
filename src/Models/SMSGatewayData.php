@@ -27,6 +27,8 @@ class SMSGatewayData extends Model
     use HasFactory;
     use SoftDeletes;
 
+    const FLAGS_DISABLED = 1;
+
     protected $table = 'sms_gateways';
 
     protected $fillable = [
@@ -39,7 +41,6 @@ class SMSGatewayData extends Model
     protected $casts = [
         'data' => 'array',
     ];
-
 
     /**
      * Undocumented function
@@ -56,7 +57,7 @@ class SMSGatewayData extends Model
      */
     public function author()
     {
-        return $this->belongsTo(config('larapress.crud.user.class'), 'author_id');
+        return $this->belongsTo(config('larapress.crud.user.model'), 'author_id');
     }
 
     /**
@@ -80,6 +81,4 @@ class SMSGatewayData extends Model
         $gateway->config($this->data);
         return $gateway;
     }
-
-    const FLAGS_DISABLED = 1;
 }

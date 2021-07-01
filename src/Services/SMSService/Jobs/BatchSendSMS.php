@@ -16,7 +16,7 @@ use Larapress\CRUD\Events\CRUDUpdated;
 use Larapress\CRUD\Exceptions\AppException;
 use Larapress\Notifications\CRUD\SMSMessageCRUDProvider;
 use Larapress\Notifications\Models\SMSGatewayData;
-use Larapress\Reports\Services\ITaskReportService;
+use Larapress\Reports\Services\TaskScheduler\ITaskSchedulerService;
 
 class BatchSendSMS implements ShouldQueue
 {

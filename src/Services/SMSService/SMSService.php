@@ -14,6 +14,7 @@ use Larapress\Profiles\Models\Domain;
 use Larapress\Profiles\Models\PhoneNumber;
 use Larapress\Profiles\IProfileUser;
 use Larapress\CRUD\ICRUDUser;
+use Larapress\CRUD\Services\CRUD\ICRUDService;
 use Larapress\Profiles\CRUD\PhoneNumberCRUDProvider;
 
 class SMSService implements ISMSService
@@ -113,10 +114,12 @@ class SMSService implements ISMSService
                 break;
         }
 
-        /** @var IProfileUser|ICRUDUSer */
+        /** @var IProfileUser */
         $user = Auth::user();
 
-        $provider = new PhoneNumberCRUDProvider();
+        /** @var ICRUDService */
+        $crudService = app(ICRUDService::class);
+        $provider = $crudService->makeCompositeProvider(config('larapress.crud.user.provider'));
         $query = $provider->onBeforeQuery($query);
 
         if ($request->shouldFilterDomains()) {

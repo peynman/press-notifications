@@ -17,6 +17,7 @@ class CreateSmsMessagesTable extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('sms_gateway_id', false, true);
             $table->bigInteger('author_id', false, true)->nullable();
+            $table->bigInteger('phone_id', false, true)->nullable();
             $table->string('from');
             $table->string('to');
             $table->string('message');
@@ -35,6 +36,7 @@ class CreateSmsMessagesTable extends Migration
                     'updated_at',
                     'sms_gateway_id',
                     'author_id',
+                    'phone_id',
                     'status',
                     'from',
                     'to',
@@ -44,6 +46,7 @@ class CreateSmsMessagesTable extends Migration
             );
 
             $table->foreign('sms_gateway_id')->references('id')->on('sms_gateways');
+            $table->foreign('phone_id')->references('id')->on('phone_numbers');
             $table->foreign('author_id')->references('id')->on('users');
         });
     }

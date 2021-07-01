@@ -2,7 +2,7 @@
 
 namespace Larapress\Notifications\Controllers;
 
-use Larapress\CRUD\Services\CRUD\BaseCRUDController;
+use Larapress\CRUD\Services\CRUD\CRUDController;
 use Larapress\Notifications\CRUD\NotificationCRUDProvider;
 use Larapress\Notifications\Services\Notifications\BatchSendNotificationRequest;
 use Larapress\Notifications\Services\Notifications\INotificationService;
@@ -15,14 +15,14 @@ use Larapress\Profiles\IProfileUser;
  *
  * @group Notifications Management
  */
-class NotificationController extends BaseCRUDController
+class NotificationController extends CRUDController
 {
     public static function registerRoutes()
     {
         parent::registerCrudRoutes(
             config('larapress.notifications.routes.notifications.name'),
             self::class,
-            NotificationCRUDProvider::class,
+            config('larapress.notifications.routes.notifications.provider'),
             [
                 'send' => [
                     'uses' => '\\'.self::class.'@sendBatchNotification',
@@ -83,7 +83,9 @@ class NotificationController extends BaseCRUDController
      */
     public function dismissNotification(INotificationService $service, $notification_id)
     {
-        return $service->dismissNotificationForUser(Auth::user(), $notification_id);
+        /** @var IProfileUser */
+        $user = Auth::user();
+        return $service->dismissNotificationForUser($user, $notification_id);
     }
 
     /**
@@ -95,6 +97,8 @@ class NotificationController extends BaseCRUDController
      */
     public function viewNotification(INotificationService $service, $notification_id)
     {
-        return $service->viewNotificationForUser(Auth::user(), $notification_id);
+        /** @var IProfileUser */
+        $user = Auth::user();
+        return $service->viewNotificationForUser($user, $notification_id);
     }
 }

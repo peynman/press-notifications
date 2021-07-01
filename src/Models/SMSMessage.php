@@ -5,7 +5,8 @@ namespace Larapress\Notifications\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Larapress\CRUD\ICRUDUser;
+use Larapress\Profiles\IProfileUser;
+use Larapress\Profiles\Models\PhoneNumber;
 
 /**
  * @property int            $id
@@ -18,7 +19,8 @@ use Larapress\CRUD\ICRUDUser;
  * @property int            $flags
  * @property array          $data
  * @property SMSGatewayData $sms_gateway
- * @property ICRUDUser      $author
+ * @property IProfileUser   $author
+ * @property PhoneNumber    $phone_number
  * @property \Carbon\Carbon $delivered_at
  * @property \Carbon\Carbon $send_at
  * @property \Carbon\Carbon $sent_at
@@ -35,6 +37,7 @@ class SMSMessage extends Model
     protected $fillable = [
         'author_id',
         'sms_gateway_id',
+        'phone_id',
         'to',
         'from',
         'message',
@@ -60,7 +63,7 @@ class SMSMessage extends Model
      */
     public function author()
     {
-        return $this->belongsTo(config('larapress.crud.user.class'), 'author_id');
+        return $this->belongsTo(config('larapress.crud.user.model'), 'author_id');
     }
 
     /**
@@ -71,6 +74,13 @@ class SMSMessage extends Model
         return $this->belongsTo(SMSGatewayData::class, 'sms_gateway_id');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function phone_number()
+    {
+        return $this->belongsTo(PhoneNumber::class, 'phone_id');
+    }
 
     const STATUS_CREATED = 1;
     const STATUS_SENT = 2;

@@ -2,7 +2,7 @@
 
 namespace Larapress\Notifications\Controllers;
 
-use Larapress\CRUD\Services\CRUD\BaseCRUDController;
+use Larapress\CRUD\Services\CRUD\CRUDController;
 use Larapress\Notifications\CRUD\SMSGatewayDataCRUDProvider;
 
 /**
@@ -10,14 +10,14 @@ use Larapress\Notifications\CRUD\SMSGatewayDataCRUDProvider;
  *
  * @group SMS Gateways Management
  */
-class SMSGatewayDataController extends BaseCRUDController
+class SMSGatewayDataController extends CRUDController
 {
     public static function registerRoutes()
     {
         parent::registerCrudRoutes(
             config('larapress.notifications.routes.sms_gateways.name'),
             self::class,
-            SMSGatewayDataCRUDProvider::class
+            config('larapress.notifications.routes.sms_gateways.provider'),
         );
     }
 }

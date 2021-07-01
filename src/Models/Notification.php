@@ -4,11 +4,14 @@ namespace Larapress\Notifications\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Larapress\Profiles\IProfileUser;
 
 /**
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
  * @property \Carbon\Carbon $deleted_at
+ * @property IProfileUser   $user
+ * @property IProfileUser   $author
  * @property int            $id
  */
 class Notification extends Model
@@ -43,7 +46,7 @@ class Notification extends Model
      */
     public function author()
     {
-        return $this->belongsTo(config('larapress.crud.user.class'), 'author_id');
+        return $this->belongsTo(config('larapress.crud.user.model'), 'author_id');
     }
 
     /**
@@ -51,6 +54,6 @@ class Notification extends Model
      */
     public function user()
     {
-        return $this->belongsTo(config('larapress.crud.user.class'), 'user_id');
+        return $this->belongsTo(config('larapress.crud.user.model'), 'user_id');
     }
 }

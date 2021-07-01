@@ -3,24 +3,28 @@
 
 namespace Larapress\Notifications\CRUD;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
-use Larapress\CRUD\Services\CRUD\BaseCRUDProvider;
+use Larapress\CRUD\Services\CRUD\Traits\CRUDProviderTrait;
 use Larapress\CRUD\Services\CRUD\ICRUDProvider;
+use Larapress\CRUD\Services\CRUD\ICRUDVerb;
 use Larapress\CRUD\Services\RBAC\IPermissionsMetadata;
 use Larapress\Notifications\Models\SMSMessage;
 use Larapress\Notifications\Services\SMSService\Jobs\SendSMS;
 
-class SMSMessageCRUDProvider implements ICRUDProvider, IPermissionsMetadata
+class SMSMessageCRUDProvider implements ICRUDProvider
 {
-    use BaseCRUDProvider;
+    use CRUDProviderTrait;
 
     public $name_in_config = 'larapress.notifications.routes.sms_messages.name';
-    public $class_in_config = 'larapress.notifications.routes.sms_messages.model';
+    public $model_in_config = 'larapress.notifications.routes.sms_messages.model';
+    public $compositions_in_config = 'larapress.notifications.routes.sms_messages.compositions';
+
     public $verbs = [
-        self::VIEW,
-        self::CREATE,
-        self::EDIT,
-        self::DELETE,
+        ICRUDVerb::VIEW,
+        ICRUDVerb::CREATE,
+        ICRUDVerb::EDIT,
+        ICRUDVerb::DELETE,
         'send',
     ];
     public $createValidations = [
@@ -39,17 +43,14 @@ class SMSMessageCRUDProvider implements ICRUDProvider, IPermissionsMetadata
     ];
     public $validSortColumns = [
         'id',
+        'author_id',
         'sms_gateway_id',
         'status',
         'created_at',
         'send_at',
         'delivered_at',
         'updated_at',
-        'author_id'
-    ];
-    public $validRelations = [
-        'sms_gateway',
-        'author'
+        'deleted_at',
     ];
     public $searchColumns = [
         'equals:id',
@@ -61,10 +62,25 @@ class SMSMessageCRUDProvider implements ICRUDProvider, IPermissionsMetadata
     /**
      * Undocumented function
      *
-     * @param array $args
      * @return array
      */
-    public function onBeforeCreate($args)
+    public function getValidRelations(): array
+    {
+        return [
+            'sms_gateway' => config('larapress.notifications.routes.sms_gateways.provider'),
+            'author' => config('larapress.crud.user.provider'),
+            'user' => config('larapress.crud.user.provider'),
+        ];
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param array $args
+     *
+     * @return array
+     */
+    public function onBeforeCreate($args): array
     {
         $args['author_id'] = Auth::user()->id;
 
@@ -76,9 +92,10 @@ class SMSMessageCRUDProvider implements ICRUDProvider, IPermissionsMetadata
      *
      * @param SMSMessage $object
      * @param array $input_data
+     *
      * @return void
      */
-    public function onAfterCreate($object, $input_data)
+    public function onAfterCreate($object, array $input_data): void
     {
         SendSMS::dispatch($object);
     }
@@ -88,7 +105,7 @@ class SMSMessageCRUDProvider implements ICRUDProvider, IPermissionsMetadata
      *
      * @return bool
      */
-    public function onBeforeAccess($object)
+    public function onBeforeAccess($object): bool
     {
         /** @var User $user */
         $user = Auth::user();
@@ -102,14 +119,15 @@ class SMSMessageCRUDProvider implements ICRUDProvider, IPermissionsMetadata
     /**
      * Undocumented function
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @return Illuminate\Database\Eloquent\Builder
+     * @param Builder $query
+     *
+     * @return Builder
      */
-    public function onBeforeQuery($query)
+    public function onBeforeQuery(Builder $query): Builder
     {
         /** @var IProfileUser|ICRUDUser $user */
         $user = Auth::user();
-        if (! $user->hasRole(config('larapress.profiles.security.roles.super-role'))) {
+        if (! $user->hasRole(config('larapress.profiles.security.roles.super_role'))) {
             $query->orWhere('author_id', $user->id);
         }
 

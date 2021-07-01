@@ -111,7 +111,7 @@ class SMSGatewayRepository implements ISMSGatewayRepository
      */
     public function getSMSGateways($user)
     {
-        if ($user->hasRole(config('larapress.profiles.security.roles.super-role')) ||
+        if ($user->hasRole(config('larapress.profiles.security.roles.super_role')) ||
             $user->hasRole(config('larapress.profiles.security.roles.affiliate'))
         ) {
             return SMSGatewayData::select(['id', 'name'])->get();

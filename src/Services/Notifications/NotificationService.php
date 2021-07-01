@@ -5,10 +5,11 @@ namespace Larapress\Notifications\Services\Notifications;
 use Illuminate\Support\Facades\Auth;
 use Larapress\ECommerce\Models\Cart;
 use Larapress\Notifications\Models\Notification;
-use Larapress\Profiles\CRUD\UserCRUDProvider;
 use Larapress\Profiles\IProfileUser;
 use Larapress\CRUD\Services\CRUD\ICRUDProvider;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use Illuminate\Database\Eloquent\Builder;
+use Larapress\CRUD\Services\CRUD\ICRUDService;
 
 class NotificationService implements INotificationService
 {
@@ -19,15 +20,17 @@ class NotificationService implements INotificationService
      * Undocumented function
      *
      * @param BatchSendNotificationRequest $request
+     *
      * @return StreamedResponse
      */
     public function exportNotificationUsers(BatchSendNotificationRequest $request)
     {
         ini_set('memory_limit', '1G');
         ini_set('max_execution_time', 0);
+
         $query = $this->getUsersForBatchRequest($request);
 
-        $providerClass = config('larapress.crud.user.crud-provider');
+        $providerClass = config('larapress.crud.user.provider');
         /** @var ICRUDProvider */
         $provider = new $providerClass();
 
@@ -93,10 +96,17 @@ class NotificationService implements INotificationService
         ];
     }
 
+    /**
+     * Undocumented function
+     *
+     * @param BatchSendNotificationRequest $request
+     *
+     * @return Builder
+     */
     protected function getUsersForBatchRequest(BatchSendNotificationRequest $request)
     {
         $ids = $request->getIds();
-        $class = config('larapress.crud.user.class');
+        $class = config('larapress.crud.user.model');
         $query = call_user_func([$class, 'select'], 'id', 'name');
 
         switch ($request->getType()) {
@@ -144,7 +154,9 @@ class NotificationService implements INotificationService
                 break;
         }
 
-        $provider = new UserCRUDProvider();
+        /** @var ICRUDService */
+        $crudService = app(ICRUDService::class);
+        $provider = $crudService->makeCompositeProvider(config('larapress.crud.user.provider'));
         $query = $provider->onBeforeQuery($query);
 
         if ($request->shouldFilterDomains()) {
