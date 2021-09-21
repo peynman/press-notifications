@@ -17,6 +17,7 @@ use Larapress\CRUD\Exceptions\AppException;
 use Larapress\Notifications\CRUD\SMSMessageCRUDProvider;
 use Larapress\Notifications\Models\SMSGatewayData;
 use Larapress\Reports\Services\TaskScheduler\ITaskSchedulerService;
+use Larapress\Notifications\Services\SMSService\ISMSGateway;
 
 class BatchSendSMS implements ShouldQueue
 {
@@ -26,17 +27,17 @@ class BatchSendSMS implements ShouldQueue
      */
     private $messageIds;
     private $gatewayId;
-    private $sender;
+    private $senderId;
     /**
      * Create a new job instance.
      *
      * @param array $ids
      */
-    public function __construct(array $ids, $gateway_id, $sender)
+    public function __construct(array $ids, $gateway_id, $senderId)
     {
         $this->messageIds = $ids;
         $this->gatewayId = $gateway_id;
-        $this->sender = $sender;
+        $this->senderId = $senderId;
 
         // $this->onQueue(config('larapress.crud.queue'));
     }
@@ -50,7 +51,7 @@ class BatchSendSMS implements ShouldQueue
      *
      * @return void
      */
-    public function handle(ITaskReportService $service)
+    public function handle(ITaskSchedulerService $service)
     {
         $gatewayData = SMSGatewayData::find($this->gatewayId);
         if (is_null($gatewayData) || BaseFlags::isActive($gatewayData->flags, SMSGatewayData::FLAGS_DISABLED)) {
@@ -59,7 +60,7 @@ class BatchSendSMS implements ShouldQueue
 
         $service->startSyncronizedTaskReport(
             'send-sms',
-            'batch-send-sms-'.$this->sender->id,
+            'batch-send-sms-'.$this->senderId,
             'Sending messages...',
             [],
             function ($onUpdated, $onSuccess, $onFailed) use ($gatewayData) {

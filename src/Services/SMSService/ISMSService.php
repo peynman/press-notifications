@@ -22,4 +22,11 @@ interface ISMSService
      * @return SMSMessage[]
      */
     public function queueSMSMessagesForRequest(BatchSendSMSRequest $request);
+
+    /**
+     * Undocumented function
+     *
+     * @return void
+     */
+    public function queueScheduledSMSMessages ();
 }

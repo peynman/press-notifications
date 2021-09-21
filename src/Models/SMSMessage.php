@@ -32,6 +32,14 @@ class SMSMessage extends Model
 {
     use SoftDeletes;
 
+    const STATUS_CREATED = 1;
+    const STATUS_SENT = 2;
+    const STATUS_FAILED_SEND = 3;
+    const STATUS_RECEIVED = 4;
+
+    const FLAGS_VERIFICATION_MESSAGE = 1;
+    const FLAGS_BATCH_SEND = 2;
+
     protected $table = 'sms_messages';
 
     protected $fillable = [
@@ -44,14 +52,15 @@ class SMSMessage extends Model
         'status',
         'flags',
         'delivered_at',
+        'send_at',
         'sent_at',
-        'data'
+        'data',
     ];
 
     protected $dates = [
         'delivered_at',
-        'send_at',
         'sent_at',
+        'send_at',
     ];
 
     protected $casts = [
@@ -81,12 +90,4 @@ class SMSMessage extends Model
     {
         return $this->belongsTo(PhoneNumber::class, 'phone_id');
     }
-
-    const STATUS_CREATED = 1;
-    const STATUS_SENT = 2;
-    const STATUS_FAILED_SEND = 3;
-    const STATUS_RECEIVED = 4;
-
-    const FLAGS_VERIFICATION_MESSAGE = 1;
-    const FLAGS_BATCH_SEND = 2;
 }

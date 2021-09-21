@@ -22,6 +22,8 @@ class Notification extends Model
     const STATUS_SEEN = 4;
 
     const FLAGS_SENT = 1;
+    const FLAGS_WEB_ONLY = 2;
+    const FLAGS_DEVICE_ONLY = 4;
 
     use SoftDeletes;
 

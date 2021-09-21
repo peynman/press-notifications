@@ -4,13 +4,17 @@ namespace Larapress\Notifications\Providers;
 
 use Illuminate\Broadcasting\BroadcastManager;
 use Illuminate\Support\ServiceProvider;
-use Larapress\ECommerce\Repositories\BankGatewayRepository;
-use Larapress\ECommerce\Repositories\IBankGatewayRepository;
-use Larapress\Notifications\Repository\ISMSGatewayRepository;
-use Larapress\Notifications\Repository\SMSGatewayRepository;
+use Larapress\Notifications\Services\Chat\ChatRepository;
+use Larapress\Notifications\Services\Chat\ChatService;
+use Larapress\Notifications\Services\Chat\IChatRepository;
+use Larapress\Notifications\Services\Chat\IChatService;
 use Larapress\Notifications\Services\Notifications\INotificationService;
+use Larapress\Notifications\Services\Notifications\INotificationsRepository;
 use Larapress\Notifications\Services\Notifications\NotificationService;
+use Larapress\Notifications\Services\Notifications\NotificationsRepository;
+use Larapress\Notifications\Services\SMSService\ISMSGatewayRepository;
 use Larapress\Notifications\Services\SMSService\ISMSService;
+use Larapress\Notifications\Services\SMSService\SMSGatewayRepository;
 use Larapress\Notifications\Services\SMSService\SMSService;
 
 class PackageServiceProvider extends ServiceProvider
@@ -24,8 +28,10 @@ class PackageServiceProvider extends ServiceProvider
     {
         $this->app->bind(ISMSService::class, SMSService::class);
         $this->app->bind(ISMSGatewayRepository::class, SMSGatewayRepository::class);
-        $this->app->bind(IBankGatewayRepository::class, BankGatewayRepository::class);
         $this->app->bind(INotificationService::class, NotificationService::class);
+        $this->app->bind(IChatService::class, ChatService::class);
+        $this->app->bind(IChatRepository::class, ChatRepository::class);
+        $this->app->bind(INotificationsRepository::class, NotificationsRepository::class);
     }
 
     /**
@@ -36,8 +42,9 @@ class PackageServiceProvider extends ServiceProvider
      */
     public function boot(BroadcastManager $broadcastManager)
     {
-        $this->loadMigrationsFrom(__DIR__.'/../../migrations');
         $this->loadTranslationsFrom(__DIR__.'/../../resources/lang', 'larapress');
+        $this->loadMigrationsFrom(__DIR__.'/../../migrations');
+        $this->loadRoutesFrom(__DIR__.'/../../routes/api.php');
 
         $this->publishes([
             __DIR__.'/../../config/notifications.php' => config_path('larapress/notifications.php'),

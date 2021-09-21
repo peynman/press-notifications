@@ -4,13 +4,16 @@
 namespace Larapress\Notifications\CRUD;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Larapress\CRUD\Exceptions\AppException;
 use Larapress\CRUD\Services\CRUD\Traits\CRUDProviderTrait;
 use Larapress\CRUD\Services\CRUD\ICRUDProvider;
 use Larapress\CRUD\Services\CRUD\ICRUDVerb;
-use Larapress\CRUD\Services\RBAC\IPermissionsMetadata;
+use Larapress\Notifications\Controllers\SMSMessageController;
 use Larapress\Notifications\Models\SMSMessage;
 use Larapress\Notifications\Services\SMSService\Jobs\SendSMS;
+use Larapress\Profiles\Models\PhoneNumber;
 
 class SMSMessageCRUDProvider implements ICRUDProvider
 {
@@ -20,27 +23,6 @@ class SMSMessageCRUDProvider implements ICRUDProvider
     public $model_in_config = 'larapress.notifications.routes.sms_messages.model';
     public $compositions_in_config = 'larapress.notifications.routes.sms_messages.compositions';
 
-    public $verbs = [
-        ICRUDVerb::VIEW,
-        ICRUDVerb::CREATE,
-        ICRUDVerb::EDIT,
-        ICRUDVerb::DELETE,
-        'send',
-    ];
-    public $createValidations = [
-        'sms_gateway_id' => 'required|numeric|exists:sms_gateways,id',
-        'flags' => 'nullable|numeric',
-        'message' => 'required|string',
-        'from' => 'required|string',
-        'to' => 'required|numeric',
-    ];
-    public $updateValidations = [
-        'sms_gateway_id' => 'required|numeric|exists:sms_gateways,id',
-        'flags' => 'nullable|numeric',
-        'message' => 'required|string',
-        'from' => 'required|string',
-        'to' => 'required|numeric',
-    ];
     public $validSortColumns = [
         'id',
         'author_id',
@@ -64,6 +46,26 @@ class SMSMessageCRUDProvider implements ICRUDProvider
      *
      * @return array
      */
+    public function getPermissionVerbs(): array
+    {
+        return [
+            ICRUDVerb::VIEW,
+            ICRUDVerb::CREATE,
+            ICRUDVerb::EDIT,
+            ICRUDVerb::DELETE,
+            'send' => [
+                'uses' => '\\'.SMSMessageController::class.'@sendBatchMessage',
+                'methods' => ['POST'],
+                'url' => config('larapress.notifications.routes.sms_messages.name').'/send',
+            ],
+        ];
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return array
+     */
     public function getValidRelations(): array
     {
         return [
@@ -71,6 +73,42 @@ class SMSMessageCRUDProvider implements ICRUDProvider
             'author' => config('larapress.crud.user.provider'),
             'user' => config('larapress.crud.user.provider'),
         ];
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param Request $request
+     * @return array
+     */
+    public function getCreateRules(Request $request): array
+    {
+        return [
+            'sms_gateway_id' => 'required|numeric|exists:sms_gateways,id',
+            'flags' => 'nullable|numeric',
+            'message' => 'required|string',
+            'send_at' => 'nullable|datetime_zoned',
+            'from' => 'required|string',
+            'to' => 'required|numeric',
+            'status' => 'required|numeric|in:'.implode(',', [
+                SMSMessage::STATUS_CREATED,
+                SMSMessage::STATUS_SENT,
+                SMSMessage::STATUS_FAILED_SEND,
+                SMSMessage::STATUS_RECEIVED,
+            ]),
+            'data' => 'nullable|json_object',
+        ];
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param Request $request
+     * @return array
+     */
+    public function getUpdateRules(Request $request): array
+    {
+        return $this->getCreateRules($request);
     }
 
     /**
@@ -84,7 +122,35 @@ class SMSMessageCRUDProvider implements ICRUDProvider
     {
         $args['author_id'] = Auth::user()->id;
 
+        /** @var PhoneNumber */
+        $phone = PhoneNumber::with('user')->where('number', $args['to'])->first();
+        if (!is_null($phone) && !is_null($phone->user)) {
+            /** @var IProfileUser $user */
+            $user = Auth::user();
+            if ($user->hasRole(config('larapress.profiles.security.roles.customer'))) {
+                if ($phone->user !== $user->id) {
+                    throw new AppException(AppException::ERR_ACCESS_DENIED);
+                }
+            }
+            if ($user->hasRole(config('larapress.profiles.security.roles.affiliate'))) {
+                if (!in_array($phone->user->getMembershipDomainId(), $user->getAffiliateDomainIds())) {
+                    throw new AppException(AppException::ERR_ACCESS_DENIED);
+                }
+            }
+        }
+
         return $args;
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param array $args
+     * @return array
+     */
+    public function onBeforeUpdate($args): array
+    {
+        return $this->onBeforeCreate($args);
     }
 
     /**
@@ -97,7 +163,24 @@ class SMSMessageCRUDProvider implements ICRUDProvider
      */
     public function onAfterCreate($object, array $input_data): void
     {
-        SendSMS::dispatch($object);
+        if (is_null($object->send_at) && $object->status === SMSMessage::STATUS_CREATED) {
+            SendSMS::dispatch($object);
+        }
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param SMSMessage $object
+     * @param array $input_data
+     *
+     * @return void
+     */
+    public function onAfterUpdate($object, array $input_data): void
+    {
+        if (is_null($object->send_at) && $object->status === SMSMessage::STATUS_CREATED) {
+            SendSMS::dispatch($object);
+        }
     }
 
     /**

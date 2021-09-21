@@ -1,6 +1,6 @@
 <?php
 
-namespace Larapress\Notifications\Repository;
+namespace Larapress\Notifications\Services\SMSService;
 
 use Larapress\Notifications\Models\SMSGatewayData;
 

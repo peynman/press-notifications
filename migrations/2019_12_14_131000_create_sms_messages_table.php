@@ -16,13 +16,14 @@ class CreateSmsMessagesTable extends Migration
         Schema::create('sms_messages', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('sms_gateway_id', false, true);
-            $table->bigInteger('author_id', false, true)->nullable();
+            $table->bigInteger('author_id', false, true);
             $table->bigInteger('phone_id', false, true)->nullable();
-            $table->string('from');
+            $table->string('from')->nullable();
             $table->string('to');
             $table->string('message');
-            $table->timestamp('delivered_at')->nullable();
+            $table->timestamp('send_at')->nullable();
             $table->timestamp('sent_at')->nullable();
+            $table->timestamp('delivered_at')->nullable();
             $table->smallInteger('status', false, true)->default(1);
             $table->integer('flags')->default(0);
             $table->json('data')->nullable();
@@ -34,11 +35,13 @@ class CreateSmsMessagesTable extends Migration
                     'deleted_at',
                     'created_at',
                     'updated_at',
+                    'send_at',
+                    'sent_at',
+                    'delivered_at',
                     'sms_gateway_id',
                     'author_id',
                     'phone_id',
                     'status',
-                    'from',
                     'to',
                     'flags'
                 ],

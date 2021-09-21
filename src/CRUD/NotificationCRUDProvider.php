@@ -3,11 +3,14 @@
 namespace Larapress\Notifications\CRUD;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Larapress\CRUD\Exceptions\AppException;
 use Larapress\CRUD\Services\CRUD\Traits\CRUDProviderTrait;
 use Larapress\CRUD\Services\CRUD\ICRUDProvider;
 use Larapress\CRUD\Services\CRUD\ICRUDVerb;
-use Larapress\CRUD\Services\RBAC\IPermissionsMetadata;
+use Larapress\Notifications\Controllers\NotificationController;
+use Larapress\Notifications\Models\Notification;
 
 class NotificationCRUDProvider implements ICRUDProvider
 {
@@ -17,10 +20,6 @@ class NotificationCRUDProvider implements ICRUDProvider
     public $model_in_config = 'larapress.notifications.routes.notifications.model';
     public $compositions_in_config = 'larapress.notifications.routes.notifications.compositions';
 
-    public $verbs = [
-        ICRUDVerb::VIEW,
-        'send',
-    ];
     public $validSortColumns = [
         'id',
         'status',
@@ -35,10 +34,44 @@ class NotificationCRUDProvider implements ICRUDProvider
         'status' => 'equals:status',
     ];
     public $searchColumns = [
-        'equals:id',
         'message',
         'title',
     ];
+
+    /**
+     * Undocumented function
+     *
+     * @return array
+     */
+    public function getPermissionVerbs(): array
+    {
+        return [
+            ICRUDVerb::VIEW,
+            ICRUDVerb::EDIT,
+            ICRUDVerb::CREATE,
+            ICRUDVerb::DELETE,
+            ICRUDVerb::EXPORT => [
+                'uses' => '\\'.NotificationController::class.'@exportNotificationUsers',
+                'methods' => ['POST'],
+                'url' => config('larapress.notifications.routes.notifications.name').'/export',
+            ],
+            'send' => [
+                'uses' => '\\'.NotificationController::class.'@sendBatchNotification',
+                'methods' => ['POST'],
+                'url' => config('larapress.notifications.routes.notifications.name').'/send',
+            ],
+            'any.dismiss' => [
+                'uses' => '\\'.NotificationController::class.'@dismissNotification',
+                'methods' => ['POST'],
+                'url' => config('larapress.notifications.routes.notifications.name').'/dismiss/{notification_id}'
+            ],
+            'any.view' => [
+                'uses' => '\\'.NotificationController::class.'@viewNotification',
+                'methods' => ['POST'],
+                'url' => config('larapress.notifications.routes.notifications.name').'/view/{notification_id}'
+            ],
+        ];
+    }
 
     /**
      * Undocumented function
@@ -53,8 +86,84 @@ class NotificationCRUDProvider implements ICRUDProvider
         ];
     }
 
+
     /**
-     * @param SMSMessage $object
+     * Undocumented function
+     *
+     * @param Request $request
+     * @return array
+     */
+    public function getCreateRules(Request $request): array
+    {
+        return [
+            'flags' => 'nullable|numeric',
+            'message' => 'required|string',
+            'title' => 'required|string',
+            'status' => 'required|numeric|in:'.implode(',', [
+                Notification::STATUS_CREATED,
+                Notification::STATUS_DISMISSED,
+                Notification::STATUS_SEEN,
+                Notification::STATUS_UNSEEN,
+            ]),
+            'data' => 'nullable|json_object',
+        ];
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param Request $request
+     * @return array
+     */
+    public function getUpdateRules(Request $request): array
+    {
+        return $this->getCreateRules($request);
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param array $args
+     *
+     * @return array
+     */
+    public function onBeforeCreate($args): array
+    {
+        $args['author_id'] = Auth::user()->id;
+
+        $class = config('larapress.crud.user.model');
+        /** @var IProfileUser */
+        $targetUser = call_user_func([$class, 'find'], $args['user_id']);
+
+        /** @var IProfileUser $user */
+        $user = Auth::user();
+        if ($user->hasRole(config('larapress.profiles.security.roles.customer'))) {
+            if ($args['user_id'] !== $user->id) {
+                throw new AppException(AppException::ERR_ACCESS_DENIED);
+            }
+        }
+        if ($user->hasRole(config('larapress.profiles.security.roles.affiliate'))) {
+            if (is_null($targetUser) || !in_array($targetUser->getMembershipDomainId(), $user->getAffiliateDomainIds())) {
+                throw new AppException(AppException::ERR_ACCESS_DENIED);
+            }
+        }
+
+        return $args;
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param array $args
+     * @return array
+     */
+    public function onBeforeUpdate($args): array
+    {
+        return $this->onBeforeCreate($args);
+    }
+
+    /**
+     * @param Notification $object
      *
      * @return bool
      */
@@ -62,7 +171,7 @@ class NotificationCRUDProvider implements ICRUDProvider
     {
         /** @var User $user */
         $user = Auth::user();
-        if (! $user->hasRole('super-role')) {
+        if (!$user->hasRole(config('larapress.profiles.security.roles.super_role'))) {
             return $object->author_id === $user->id;
         }
 

@@ -3,6 +3,7 @@
 
 namespace Larapress\Notifications\Services\SMSService;
 
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Larapress\CRUD\BaseFlags;
@@ -13,9 +14,7 @@ use Larapress\Notifications\Services\SMSService\Jobs\BatchSendSMS;
 use Larapress\Profiles\Models\Domain;
 use Larapress\Profiles\Models\PhoneNumber;
 use Larapress\Profiles\IProfileUser;
-use Larapress\CRUD\ICRUDUser;
 use Larapress\CRUD\Services\CRUD\ICRUDService;
-use Larapress\Profiles\CRUD\PhoneNumberCRUDProvider;
 
 class SMSService implements ISMSService
 {
@@ -150,7 +149,7 @@ class SMSService implements ISMSService
                     $msg = SMSMessage::create([
                         'author_id' => $user->id,
                         'sms_gateway_id' => $request->getGatewayID(),
-                        'from' => 'Batch SMS: '.$user->id,
+                        'from' => 'Batch SMS: ' . $user->id,
                         'to' => $number->number,
                         'message' => $message,
                         'flags' => SMSMessage::FLAGS_BATCH_SEND,
@@ -163,7 +162,7 @@ class SMSService implements ISMSService
                     $msgIds[] = $msg->id;
                 }
             }
-            BatchSendSMS::dispatch($msgIds, $request->getGatewayID(), $user);
+            BatchSendSMS::dispatch($msgIds, $request->getGatewayID(), $user->id);
         });
 
         return [
@@ -171,6 +170,34 @@ class SMSService implements ISMSService
                 'count' => $msgCounter
             ])
         ];
+    }
+
+
+    /**
+     * Undocumented function
+     *
+     * @return void
+     */
+    public function queueScheduledSMSMessages()
+    {
+        /** @var SMSMessage[] */
+        $msgs = SMSMessage::query()
+            ->distinct()
+            ->where('status', SMSMessage::STATUS_CREATED)
+            ->where('send_at', '>=', Carbon::now())
+            ->get(['sms_gateway_id', 'author_id']);
+
+        foreach ($msgs as $msg) {
+            SMSMessage::query()
+                ->select('id')
+                ->where('status', SMSMessage::STATUS_CREATED)
+                ->where('send_at', '>=', Carbon::now())
+                ->where('author_id', $msg->author_id)
+                ->where('sms_gateway_id', $msg->sms_gateway_id)
+                ->chunk(100, function ($ids) use($msg) {
+                    BatchSendSMS::dispatch($ids->pluck('id'), $msg->sms_gateway_id, $msg->author_id);
+                });
+        }
     }
 
     /**
@@ -182,9 +209,9 @@ class SMSService implements ISMSService
      */
     public function getMessageForUser($message, $user)
     {
-        $firstname = isset($user->profile['data']['values']['firstname']) ? $user->profile['data']['values']['firstname'] : $user->name;
-        $lastname = isset($user->profile['data']['values']['lastname']) ? $user->profile['data']['values']['lastname'] : '';
-        $fullname = $firstname.' '.$lastname;
+        $firstname = isset($user->form_profile_default['data']['values']['firstname']) ? $user->form_profile_default['data']['values']['firstname'] : $user->name;
+        $lastname = isset($user->form_profile_default['data']['values']['lastname']) ? $user->form_profile_default['data']['values']['lastname'] : '';
+        $fullname = $firstname . ' ' . $lastname;
         $message = str_replace('$firstname', $firstname, $message);
         $message = str_replace('$lastname', $lastname, $message);
         $message = str_replace('$fullname', $fullname, $message);

@@ -77,12 +77,16 @@ class BatchSendSMSRequest extends FormRequest
 
     public function getRoleIds()
     {
-        return array_keys($this->request->get('roles', []));
+        /** @var array */
+        $roles = $this->request->get('roles', []);
+        return array_keys($roles);
     }
 
     public function getDomainIds()
     {
-        return array_keys($this->request->get('domains', []));
+        /** @var array */
+        $domains = $this->request->get('domains', []);
+        return array_keys($domains);
     }
 
     public function shouldFilterRoles()

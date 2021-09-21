@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Auth;
 use Larapress\CRUD\Services\CRUD\Traits\CRUDProviderTrait;
 use Larapress\CRUD\Services\CRUD\ICRUDProvider;
 use Larapress\CRUD\Services\CRUD\ICRUDVerb;
-use Larapress\CRUD\Services\RBAC\IPermissionsMetadata;
 
 class SMSGatewayDataCRUDProvider implements ICRUDProvider
 {
@@ -23,29 +22,15 @@ class SMSGatewayDataCRUDProvider implements ICRUDProvider
         ICRUDVerb::EDIT,
         ICRUDVerb::DELETE
     ];
-    public $createValidations = [
-        'name' => 'required|string|unique:sms_gateways,name',
-        'flags' => 'nullable|numeric',
-        'data.gateway' => 'required|string',
-    ];
-    public $updateValidations = [
-        'name' => 'required|string|unique:sms_gateways,name',
-        'flags' => 'nullable|numeric',
-        'data.gateway' => 'required|string',
-    ];
     public $validSortColumns = [
         'id',
-        'title',
-        'gateway_id',
-        'status',
+        'name',
         'created_at',
         'updated_at',
         'deleted_at',
     ];
     public $searchColumns = [
-        'equals:id',
-        'equals:gateway_id',
-        'title',
+        'name',
     ];
 
     /**
@@ -61,6 +46,22 @@ class SMSGatewayDataCRUDProvider implements ICRUDProvider
     }
 
     /**
+     * Undocumented function
+     *
+     * @param Request $request
+     * @return array
+     */
+    public function getCreateRules(Request $request): array
+    {
+        return [
+            'name' => 'required|string|unique:sms_gateways,name',
+            'flags' => 'nullable|numeric',
+            'data' => 'required|json_object',
+            'data.gateway' => 'required|string|in:' . implode(array_keys(config('larapress.notifications.sms.gateways'))),
+        ];
+    }
+
+    /**
      * Exclude current id in name unique request
      *
      * @param Request $request
@@ -69,8 +70,10 @@ class SMSGatewayDataCRUDProvider implements ICRUDProvider
      */
     public function getUpdateRules(Request $request): array
     {
-        $this->updateValidations['name'] .= ',' . $request->route('id');
-        return $this->updateValidations;
+        $rules = $this->getCreateRules($request);
+        $rules['name'] .= ',' . $request->route('id');
+
+        return $rules;
     }
 
     /**
