@@ -18,6 +18,7 @@ class SMSGatewayDataCRUDProvider implements ICRUDProvider
 
     public $verbs = [
         ICRUDVerb::VIEW,
+        ICRUDVerb::SHOW,
         ICRUDVerb::CREATE,
         ICRUDVerb::EDIT,
         ICRUDVerb::DELETE
@@ -31,6 +32,7 @@ class SMSGatewayDataCRUDProvider implements ICRUDProvider
     ];
     public $searchColumns = [
         'name',
+        'gateway',
     ];
 
     /**
@@ -55,9 +57,9 @@ class SMSGatewayDataCRUDProvider implements ICRUDProvider
     {
         return [
             'name' => 'required|string|unique:sms_gateways,name',
+            'gateway' => 'required|string|in:' . implode(',', array_keys(config('larapress.notifications.sms.gateways'))),
             'flags' => 'nullable|numeric',
             'data' => 'required|json_object',
-            'data.gateway' => 'required|string|in:' . implode(array_keys(config('larapress.notifications.sms.gateways'))),
         ];
     }
 

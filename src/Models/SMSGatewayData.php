@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  * @property int            $id
  * @property int            $author_id
  * @property string         $name
+ * @property string         $gateway
  * @property int            $flags
  * @property array          $data
  * @property ICRUDUSer      $author
@@ -34,6 +35,7 @@ class SMSGatewayData extends Model
     protected $fillable = [
         'author_id',
         'name',
+        'gateway',
         'data',
         'flags',
     ];

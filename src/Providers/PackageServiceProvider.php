@@ -4,10 +4,6 @@ namespace Larapress\Notifications\Providers;
 
 use Illuminate\Broadcasting\BroadcastManager;
 use Illuminate\Support\ServiceProvider;
-use Larapress\Notifications\Services\Chat\ChatRepository;
-use Larapress\Notifications\Services\Chat\ChatService;
-use Larapress\Notifications\Services\Chat\IChatRepository;
-use Larapress\Notifications\Services\Chat\IChatService;
 use Larapress\Notifications\Services\Notifications\INotificationService;
 use Larapress\Notifications\Services\Notifications\INotificationsRepository;
 use Larapress\Notifications\Services\Notifications\NotificationService;
@@ -29,8 +25,6 @@ class PackageServiceProvider extends ServiceProvider
         $this->app->bind(ISMSService::class, SMSService::class);
         $this->app->bind(ISMSGatewayRepository::class, SMSGatewayRepository::class);
         $this->app->bind(INotificationService::class, NotificationService::class);
-        $this->app->bind(IChatService::class, ChatService::class);
-        $this->app->bind(IChatRepository::class, ChatRepository::class);
         $this->app->bind(INotificationsRepository::class, NotificationsRepository::class);
     }
 
@@ -44,7 +38,6 @@ class PackageServiceProvider extends ServiceProvider
     {
         $this->loadTranslationsFrom(__DIR__.'/../../resources/lang', 'larapress');
         $this->loadMigrationsFrom(__DIR__.'/../../migrations');
-        $this->loadRoutesFrom(__DIR__.'/../../routes/api.php');
 
         $this->publishes([
             __DIR__.'/../../config/notifications.php' => config_path('larapress/notifications.php'),

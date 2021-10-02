@@ -17,14 +17,22 @@ class CreateSmsGatewaysTable extends Migration
 	        $table->bigIncrements('id');
             $table->bigInteger('author_id', false, true)->nullable();
             $table->string('name');
+            $table->string('gateway');
 	        $table->integer('flags', false, true)->default(0);
 	        $table->json('data')->nullable();
 	        $table->timestamps();
             $table->softDeletes();
 
-            $table->index(['deleted_at', 'created_at', 'updated_at']);
-            $table->unique(['deleted_at', 'created_at', 'updated_at']);
+            $table->index([
+                'deleted_at',
+                'created_at',
+                'updated_at',
+                'name',
+                'gateway',
+                'flags',
+            ], 'sms_gateways_full_index');
 
+            $table->unique(['deleted_at', 'name']);
             $table->foreign('author_id')->references('id')->on('users');
         });
         Schema::create('sms_gateway_domain', function (Blueprint $table) {

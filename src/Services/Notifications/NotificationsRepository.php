@@ -17,7 +17,7 @@ class NotificationsRepository implements INotificationsRepository
      *
      * @return PaginatedResponse
      */
-    public function getUnseenNotificationsPaginated(IProfileUser $user, $page = 0, $limit = null)
+    public function getUnseenNotificationsPaginated(IProfileUser $user, $page = 1, $limit = null)
     {
         $limit = PaginatedResponse::safeLimit($limit);
         return new PaginatedResponse(
@@ -37,7 +37,7 @@ class NotificationsRepository implements INotificationsRepository
      *
      * @return PaginatedResponse
      */
-    public function getOldNotificationsPaginated(IProfileUser $user, $page = 0, $limit = null)
+    public function getOldNotificationsPaginated(IProfileUser $user, $page = 1, $limit = null)
     {
         $limit = PaginatedResponse::safeLimit($limit);
         return new PaginatedResponse(
