@@ -19,6 +19,7 @@ class SMSGatewayDataCRUDProvider implements ICRUDProvider
     public $verbs = [
         ICRUDVerb::VIEW,
         ICRUDVerb::SHOW,
+        ICRUDVerb::SHOW,
         ICRUDVerb::CREATE,
         ICRUDVerb::EDIT,
         ICRUDVerb::DELETE

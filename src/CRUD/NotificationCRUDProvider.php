@@ -47,6 +47,7 @@ class NotificationCRUDProvider implements ICRUDProvider
     {
         return [
             ICRUDVerb::VIEW,
+            ICRUDVerb::SHOW,
             ICRUDVerb::EDIT,
             ICRUDVerb::CREATE,
             ICRUDVerb::DELETE,
