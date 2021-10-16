@@ -17,6 +17,7 @@ use Larapress\CRUD\Events\CRUDUpdated;
 use Larapress\CRUD\Exceptions\AppException;
 use Larapress\Notifications\CRUD\SMSMessageCRUDProvider;
 use Larapress\Notifications\Models\SMSGatewayData;
+use Larapress\Notifications\Services\SMSService\ISMSGateway;
 
 class SendSMS implements ShouldQueue
 {
@@ -44,11 +45,9 @@ class SendSMS implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @param ISMSService $service
-     *
      * @return void
      */
-    public function handle(ISMSService $service)
+    public function handle()
     {
         $gatewayData = $this->message->sms_gateway;
         if (is_null($gatewayData) || BaseFlags::isActive($gatewayData->flags, SMSGatewayData::FLAGS_DISABLED)) {

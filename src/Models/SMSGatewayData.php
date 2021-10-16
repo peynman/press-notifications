@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Larapress\CRUD\ICRUDUser;
 use Larapress\Notifications\Factories\SMSGatewayDataFactory;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Larapress\Notifications\Services\SMSService\ISMSGateway;
 
 /**
  * @property int            $id
