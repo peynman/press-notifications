@@ -12,7 +12,7 @@ class ExportSMSGateways extends Command
      *
      * @var string
      */
-    protected $signature = 'lp:notifications:export-sms {path?}';
+    protected $signature = 'lp:notify:export-sms {path?}';
 
     /**
      * The console command description.

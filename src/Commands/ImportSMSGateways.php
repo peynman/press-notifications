@@ -3,10 +3,7 @@
 namespace Larapress\Notifications\Commands;
 
 use Illuminate\Console\Command;
-use Larapress\ECommerce\Models\ProductType;
 use Larapress\Notifications\Models\SMSGatewayData;
-
-use function PHPUnit\Framework\directoryExists;
 
 class ImportSMSGateways extends Command
 {
@@ -15,7 +12,7 @@ class ImportSMSGateways extends Command
      *
      * @var string
      */
-    protected $signature = 'lp:notifications:import-sms {path?}';
+    protected $signature = 'lp:notify:import-sms {path?}';
 
     /**
      * The console command description.

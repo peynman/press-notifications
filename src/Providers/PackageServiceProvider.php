@@ -4,6 +4,8 @@ namespace Larapress\Notifications\Providers;
 
 use Illuminate\Broadcasting\BroadcastManager;
 use Illuminate\Support\ServiceProvider;
+use Larapress\Notifications\Commands\ExportSMSGateways;
+use Larapress\Notifications\Commands\ImportSMSGateways;
 use Larapress\Notifications\Services\Notifications\INotificationService;
 use Larapress\Notifications\Services\Notifications\INotificationsRepository;
 use Larapress\Notifications\Services\Notifications\NotificationService;
@@ -42,5 +44,12 @@ class PackageServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/../../config/notifications.php' => config_path('larapress/notifications.php'),
         ], ['config', 'larapress', 'larapress-notifications']);
+
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                ExportSMSGateways::class,
+                ImportSMSGateways::class,
+            ]);
+        }
     }
 }
