@@ -25,7 +25,7 @@ class KavehnegarSMSGateway implements ISMSGateway
      */
     public function config(array $conf)
     {
-        if (!isset($conf['apiKey']) || !isset($conf['number'])) {
+        if (!isset($conf['api_key']) || !isset($conf['number'])) {
             throw new Exception("KavehnegarSMSGateway invalid config");
         }
         $this->config = $conf;
@@ -38,7 +38,7 @@ class KavehnegarSMSGateway implements ISMSGateway
      */
     public function init()
     {
-        $this->client = new \Kavenegar\KavenegarApi( $this->config['apiKey'] );
+        $this->client = new \Kavenegar\KavenegarApi( $this->config['api_key'] );
     }
 
     /**

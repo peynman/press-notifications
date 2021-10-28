@@ -23,7 +23,7 @@ class SMSIRFastGateway implements ISMSGateway
      */
     public function config(array $conf)
     {
-        if (!isset($conf['api_key']) || !isset($conf['secret_key']) || !isset($conf['line_number']) || !isset($conf['template_id'])) {
+        if (!isset($conf['api_key']) || !isset($conf['secret_key']) || !isset($conf['template_id'])) {
             throw new Exception("SMSIR invalid config");
         }
 

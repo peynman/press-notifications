@@ -71,14 +71,11 @@ class SMSGatewayData extends Model
      */
     public function getGateway()
     {
-        if (!isset($this->data['gateway'])) {
-            throw new Exception("SMS Gateway not defined");
-        }
         $gatewaysMap = config('larapress.notifications.sms.gateways');
-        if (!isset($gatewaysMap[$this->data['gateway']])) {
+        if (!isset($gatewaysMap[$this->gateway])) {
             throw new Exception("SMS Gateway not found with asked name: ".$this->data['gateway']);
         }
-        $gatewayClass = $gatewaysMap[$this->data['gateway']];
+        $gatewayClass = $gatewaysMap[$this->gateway];
         /** @var ISMSGateway */
         $gateway = new $gatewayClass();
         $gateway->config($this->data);

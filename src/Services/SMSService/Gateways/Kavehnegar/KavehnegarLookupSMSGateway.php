@@ -5,8 +5,6 @@ namespace Larapress\Notifications\Services\SMSService\Gateways\Kavehnegar;
 
 use Larapress\Notifications\Services\SMSService\ISMSGateway;
 use Exception;
-use CurlHandle;
-use Illuminate\Support\Facades\Log;
 
 /**
  * An implementation of ISMSGateway for Kavehnegar Provider
@@ -25,7 +23,7 @@ class KavehnegarLookupSMSGateway implements ISMSGateway
      */
     public function config(array $conf)
     {
-        if (!isset($conf['apiKey']) || !isset($conf['template'])) {
+        if (!isset($conf['api_key']) || !isset($conf['template'])) {
             throw new Exception("KavehnegarSMSGateway invalid config");
         }
         $this->config = $conf;
@@ -38,7 +36,7 @@ class KavehnegarLookupSMSGateway implements ISMSGateway
      */
     public function init()
     {
-        $this->client = new \Kavenegar\KavenegarApi( $this->config['apiKey'] );
+        $this->client = new \Kavenegar\KavenegarApi( $this->config['api_key'] );
     }
 
     /**
