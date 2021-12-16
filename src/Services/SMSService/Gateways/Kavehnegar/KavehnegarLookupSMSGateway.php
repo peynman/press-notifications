@@ -36,7 +36,7 @@ class KavehnegarLookupSMSGateway implements ISMSGateway
      */
     public function init()
     {
-        $this->client = new \Kavenegar\KavenegarApi( $this->config['api_key'] );
+        $this->client = new \Kavenegar\KavenegarApi($this->config['api_key']);
     }
 
     /**
@@ -48,6 +48,12 @@ class KavehnegarLookupSMSGateway implements ISMSGateway
      */
     public function sendSMS(String $number, String $message, array $options)
     {
-        return $this->client->VerifyLookup($number, $message, null, null, $this->config['template']);
+        return $this->client->VerifyLookup(
+            $number,
+            $message,
+            $options['token2'] ?? null,
+            $options['token3'] ?? null,
+            $this->config['template']
+        );
     }
 }

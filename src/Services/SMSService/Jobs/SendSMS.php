@@ -62,6 +62,7 @@ class SendSMS implements ShouldQueue
 
             $msg_id = $gateway->sendSMS($this->message->to, $this->message->message, [
                 'from' => $this->message->from,
+                ...($this->message->data ?? []),
             ]);
             $data = $this->message->data;
             if (is_null($data)) {
